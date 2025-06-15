@@ -22,12 +22,12 @@ public:
 	void CreateOpenGLWindow(WindowData& data);
 	void Destroy();
 
-	inline GLFWwindow*& GetNativeWindow() { return window; };
+	inline GLFWwindow*& GetNativeWindow() { return m_window; };
 
-	inline int GetWidth() { return Windata.width; }
-	inline int GetHeight() { return Windata.height; }
+	inline int GetWidth() { return m_Windata.width; }
+	inline int GetHeight() { return m_Windata.height; }
 private:
-	GLFWwindow* window = nullptr;
-	WindowData Windata;
+	GLFWwindow* m_window = nullptr;
+	WindowData m_Windata;
 };
 

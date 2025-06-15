@@ -13,14 +13,15 @@ Window::~Window()
 
 void Window::update()
 {
-	glfwSwapBuffers(window);
+	glfwSwapBuffers(m_window);
+    glfwPollEvents();
 }
 
 void Window::CreateOpenGLWindow(WindowData& data)
 {
-    Windata.width = data.width;
-    Windata.height = data.height;
-    Windata.name = data.name;
+    m_Windata.width = data.width;
+    m_Windata.height = data.height;
+    m_Windata.name = data.name;
 
     if (!glfwInit()) {
         LOG_ERROR("Failed to initialize GLFW");
@@ -31,21 +32,26 @@ void Window::CreateOpenGLWindow(WindowData& data)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(Windata.width, Windata.height, Windata.name.c_str(), nullptr, nullptr);
-    if (window == nullptr) {
+    m_window = glfwCreateWindow(m_Windata.width, m_Windata.height, m_Windata.name.c_str(), nullptr, nullptr);
+    if (m_window == nullptr) {
         LOG_ERROR("Failed to create GLFW window");
         glfwTerminate();
         exit(-1);
     }
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(m_window);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         LOG_ERROR("Failed to initialize GLAD");
         exit(-1);
     }
+
+    glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window)
+        {
+            LOG_INFO("Window closed");
+        });
 }
 
 void Window::Destroy()
 {
-	glfwDestroyWindow(window);
+	glfwDestroyWindow(m_window);
 }

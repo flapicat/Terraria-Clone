@@ -1302,6 +1302,7 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Input.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\App.cpp">
@@ -1325,5 +1326,10 @@
     <ClCompile Include="source\main.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Input.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\default.frag" />
+    <None Include="assets\shaders\default.vert" />
   </ItemGroup>
 </Project>
