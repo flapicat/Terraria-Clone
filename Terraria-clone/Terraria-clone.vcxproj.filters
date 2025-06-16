@@ -1,11 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="source">
-      <UniqueIdentifier>{76FF3A1C-62A1-65F2-4B5C-7946379DEC42}</UniqueIdentifier>
+    <Filter Include="Source">
+      <UniqueIdentifier>{56EB95D1-428D-C0A7-2B48-D4FB178947F8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\Render">
-      <UniqueIdentifier>{251DF838-91DD-736F-5A18-BDECC697B84B}</UniqueIdentifier>
+    <Filter Include="Source\App">
+      <UniqueIdentifier>{868FC236-7247-0484-DB4E-DDDFC7259F74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\App\Render">
+      <UniqueIdentifier>{35FB7A21-A111-79B7-EA88-04D956DE493F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game">
+      <UniqueIdentifier>{BF8A170F-2B40-9004-B434-8ADB20E98608}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{583885F2-44DA-AFC8-2D95-C31C19D63619}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\shaders">
+      <UniqueIdentifier>{51CD2FD9-3D9B-23DF-262F-9405129CFF43}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
@@ -30,23 +42,35 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\App.h">
-      <Filter>source</Filter>
+    <ClInclude Include="Source\App\App.h">
+      <Filter>Source\App</Filter>
     </ClInclude>
-    <ClInclude Include="source\Log.h">
-      <Filter>source</Filter>
+    <ClInclude Include="Source\App\AppHeader.h">
+      <Filter>Source\App</Filter>
     </ClInclude>
-    <ClInclude Include="source\Render\Buffer.h">
-      <Filter>source\Render</Filter>
+    <ClInclude Include="Source\App\Common.h">
+      <Filter>Source\App</Filter>
     </ClInclude>
-    <ClInclude Include="source\Render\Shader.h">
-      <Filter>source\Render</Filter>
+    <ClInclude Include="Source\App\Input.h">
+      <Filter>Source\App</Filter>
     </ClInclude>
-    <ClInclude Include="source\Render\VertexArray.h">
-      <Filter>source\Render</Filter>
+    <ClInclude Include="Source\App\Log.h">
+      <Filter>Source\App</Filter>
     </ClInclude>
-    <ClInclude Include="source\Window.h">
-      <Filter>source</Filter>
+    <ClInclude Include="Source\App\Render\Buffer.h">
+      <Filter>Source\App\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\App\Render\Shader.h">
+      <Filter>Source\App\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\App\Render\VertexArray.h">
+      <Filter>Source\App\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\App\Window.h">
+      <Filter>Source\App</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Game.h">
+      <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\glm\common.hpp">
       <Filter>vendor\glm\glm</Filter>
@@ -1302,34 +1326,42 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Input.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\App.cpp">
-      <Filter>source</Filter>
+    <ClCompile Include="Source\App\App.cpp">
+      <Filter>Source\App</Filter>
     </ClCompile>
-    <ClCompile Include="source\Log.cpp">
-      <Filter>source</Filter>
+    <ClCompile Include="Source\App\Input.cpp">
+      <Filter>Source\App</Filter>
     </ClCompile>
-    <ClCompile Include="source\Render\Buffer.cpp">
-      <Filter>source\Render</Filter>
+    <ClCompile Include="Source\App\Log.cpp">
+      <Filter>Source\App</Filter>
     </ClCompile>
-    <ClCompile Include="source\Render\Shader.cpp">
-      <Filter>source\Render</Filter>
+    <ClCompile Include="Source\App\Render\Buffer.cpp">
+      <Filter>Source\App\Render</Filter>
     </ClCompile>
-    <ClCompile Include="source\Render\VertexArray.cpp">
-      <Filter>source\Render</Filter>
+    <ClCompile Include="Source\App\Render\Shader.cpp">
+      <Filter>Source\App\Render</Filter>
     </ClCompile>
-    <ClCompile Include="source\Window.cpp">
-      <Filter>source</Filter>
+    <ClCompile Include="Source\App\Render\VertexArray.cpp">
+      <Filter>Source\App\Render</Filter>
     </ClCompile>
-    <ClCompile Include="source\main.cpp">
-      <Filter>source</Filter>
+    <ClCompile Include="Source\App\Window.cpp">
+      <Filter>Source\App</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Input.cpp" />
+    <ClCompile Include="Source\App\main.cpp">
+      <Filter>Source\App</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Game.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\shaders\default.frag" />
-    <None Include="assets\shaders\default.vert" />
+    <None Include="assets\shaders\default.frag">
+      <Filter>assets\shaders</Filter>
+    </None>
+    <None Include="assets\shaders\default.vert">
+      <Filter>assets\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

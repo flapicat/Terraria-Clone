@@ -5,8 +5,7 @@ workspace "Terraria-clone"
 	configurations
 	{
 		"Debug",
-		"Release",
-		"Dist"
+		"Release"
 	}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
@@ -36,8 +35,12 @@ project "Terraria-clone"
 
 	files
 	{
-		"%{prj.name}/source/**.h",
-		"%{prj.name}/source/**.cpp",
+		"%{prj.name}/assets/**",
+		"%{prj.name}/Source/App/**.h",
+		"%{prj.name}/Source/App/**.cpp",
+		"%{prj.name}/Source/Game/**.h",
+		"%{prj.name}/Source/Game/**.cpp",
+
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
 	}
@@ -49,7 +52,8 @@ project "Terraria-clone"
 
 	includedirs
 	{
-		"%{prj.name}/source",
+		"%{prj.name}/Source/App",
+		"%{prj.name}/Source/Game",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
