@@ -39,11 +39,13 @@ void Window::CreateOpenGLWindow(WindowData& data)
         exit(-1);
     }
     glfwMakeContextCurrent(m_window);
+    glfwSwapInterval(0);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         LOG_ERROR("Failed to initialize GLAD");
         exit(-1);
     }
+    glEnable(GL_DEPTH_BUFFER_BIT);
 
     glfwSetWindowCloseCallback(m_window, [](GLFWwindow* window)
         {

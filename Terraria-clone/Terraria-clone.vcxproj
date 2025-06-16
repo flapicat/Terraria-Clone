@@ -97,12 +97,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\App\DeltaTime.h" />
+    <ClInclude Include="Source\Game\Object\Object.h" />
     <ClInclude Include="Source\App\App.h" />
     <ClInclude Include="Source\App\AppHeader.h" />
-    <ClInclude Include="Source\App\Common.h" />
     <ClInclude Include="Source\App\Input.h" />
     <ClInclude Include="Source\App\Log.h" />
     <ClInclude Include="Source\App\Render\Buffer.h" />
+    <ClInclude Include="Source\App\Render\OrthographicCamera.h" />
     <ClInclude Include="Source\App\Render\Shader.h" />
     <ClInclude Include="Source\App\Render\VertexArray.h" />
     <ClInclude Include="Source\App\Window.h" />
@@ -527,10 +529,13 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\App\DeltaTime.cpp" />
+    <ClCompile Include="Source\Game\Object\Object.cpp" />
     <ClCompile Include="Source\App\App.cpp" />
     <ClCompile Include="Source\App\Input.cpp" />
     <ClCompile Include="Source\App\Log.cpp" />
     <ClCompile Include="Source\App\Render\Buffer.cpp" />
+    <ClCompile Include="Source\App\Render\OrthographicCamera.cpp" />
     <ClCompile Include="Source\App\Render\Shader.cpp" />
     <ClCompile Include="Source\App\Render\VertexArray.cpp" />
     <ClCompile Include="Source\App\Window.cpp" />

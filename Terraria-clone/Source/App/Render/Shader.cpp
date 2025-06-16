@@ -2,7 +2,6 @@
 
 Shader::Shader(const char* pathVertShader, const char* pathFragShader)
 {
-	LOG_INFO("CREATING SHADER:");
 	std::string vertexCode;
 	std::ifstream vShaderFile;
 	vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);

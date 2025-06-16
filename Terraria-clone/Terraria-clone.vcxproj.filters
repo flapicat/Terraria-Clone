@@ -48,9 +48,6 @@
     <ClInclude Include="Source\App\AppHeader.h">
       <Filter>Source\App</Filter>
     </ClInclude>
-    <ClInclude Include="Source\App\Common.h">
-      <Filter>Source\App</Filter>
-    </ClInclude>
     <ClInclude Include="Source\App\Input.h">
       <Filter>Source\App</Filter>
     </ClInclude>
@@ -1326,6 +1323,9 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="Source\App\Render\OrthographicCamera.h" />
+    <ClInclude Include="Source\Game\Object\Object.h" />
+    <ClInclude Include="Source\App\DeltaTime.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\App\App.cpp">
@@ -1355,6 +1355,9 @@
     <ClCompile Include="Source\Game\Game.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Source\App\Render\OrthographicCamera.cpp" />
+    <ClCompile Include="Source\Game\Object\Object.cpp" />
+    <ClCompile Include="Source\App\DeltaTime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\default.frag">

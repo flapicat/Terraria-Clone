@@ -5,8 +5,8 @@
 class Input
 {
 public:
-	inline static bool keyPressed(int keyCode) { return s_instance->keyPressedImpl(keyCode); };
-	inline static bool keyReleased(int keyCode) { return s_instance->keyReleasedImpl(keyCode); };
+	inline static bool IskeyPressed(int keyCode) { return s_instance->keyPressedImpl(keyCode); };
+	inline static bool IskeyReleased(int keyCode) { return s_instance->keyReleasedImpl(keyCode); };
 	
 	inline static bool IsMouseButtonPressed(int button) { return s_instance->IsMouseButtonPressedImpl(button); }
 	inline static bool IsMouseButtonReleased(int button) { return s_instance->IsMouseButtonReleasedImpl(button); }

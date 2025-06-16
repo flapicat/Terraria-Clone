@@ -1,8 +1,7 @@
 #pragma once
-
 #include "App.h"
 #include "Input.h"
-#include "Log.h"
+#include "DeltaTime.h"
 
 #include "Render/Buffer.h"
 #include "Render/Shader.h"
