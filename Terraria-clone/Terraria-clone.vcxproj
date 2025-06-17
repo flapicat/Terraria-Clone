@@ -56,10 +56,11 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>trpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Source\App;Source\Game;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Source;Source\App;Source\Game;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -75,10 +76,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>trpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Source\App;Source\Game;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Source;Source\App;Source\Game;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -97,10 +99,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Source\App\DeltaTime.h" />
-    <ClInclude Include="Source\Game\Object\Object.h" />
     <ClInclude Include="Source\App\App.h" />
-    <ClInclude Include="Source\App\AppHeader.h" />
+    <ClInclude Include="Source\App\DeltaTime.h" />
     <ClInclude Include="Source\App\Input.h" />
     <ClInclude Include="Source\App\Log.h" />
     <ClInclude Include="Source\App\Render\Buffer.h" />
@@ -108,7 +108,10 @@
     <ClInclude Include="Source\App\Render\Shader.h" />
     <ClInclude Include="Source\App\Render\VertexArray.h" />
     <ClInclude Include="Source\App\Window.h" />
+    <ClInclude Include="Source\Game\Entity\Player.h" />
     <ClInclude Include="Source\Game\Game.h" />
+    <ClInclude Include="Source\Game\Object\Object.h" />
+    <ClInclude Include="Source\trpch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -529,9 +532,8 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\App\DeltaTime.cpp" />
-    <ClCompile Include="Source\Game\Object\Object.cpp" />
     <ClCompile Include="Source\App\App.cpp" />
+    <ClCompile Include="Source\App\DeltaTime.cpp" />
     <ClCompile Include="Source\App\Input.cpp" />
     <ClCompile Include="Source\App\Log.cpp" />
     <ClCompile Include="Source\App\Render\Buffer.cpp" />
@@ -540,11 +542,69 @@
     <ClCompile Include="Source\App\Render\VertexArray.cpp" />
     <ClCompile Include="Source\App\Window.cpp" />
     <ClCompile Include="Source\App\main.cpp" />
+    <ClCompile Include="Source\Game\Entity\Player.cpp" />
     <ClCompile Include="Source\Game\Game.cpp" />
+    <ClCompile Include="Source\Game\Object\Object.cpp" />
+    <ClCompile Include="Source\trpch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\Textures\Thumbs.db" />
+    <None Include="assets\Textures\blocksdescription.txt" />
+    <None Include="assets\Textures\blocksname.txt" />
+    <None Include="assets\Textures\body\Thumbs.db" />
+    <None Include="assets\Textures\crafting.txt" />
+    <None Include="assets\Textures\font.ttf" />
+    <None Include="assets\Textures\itemsdescription.txt" />
+    <None Include="assets\Textures\itemsname.txt" />
     <None Include="assets\shaders\default.frag" />
     <None Include="assets\shaders\default.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\Textures\blueslime.png" />
+    <Image Include="assets\Textures\body\copper_armour_back.png" />
+    <Image Include="assets\Textures\body\copper_armour_feet.png" />
+    <Image Include="assets\Textures\body\copper_armour_front.png" />
+    <Image Include="assets\Textures\body\copper_armour_head.png" />
+    <Image Include="assets\Textures\body\gold_armour_back.png" />
+    <Image Include="assets\Textures\body\gold_armour_feet.png" />
+    <Image Include="assets\Textures\body\gold_armour_front.png" />
+    <Image Include="assets\Textures\body\gold_armour_head.png" />
+    <Image Include="assets\Textures\body\ice_armour_back.png" />
+    <Image Include="assets\Textures\body\ice_armour_feet.png" />
+    <Image Include="assets\Textures\body\ice_armour_front.png" />
+    <Image Include="assets\Textures\body\ice_armour_head.png" />
+    <Image Include="assets\Textures\body\iron_armour_back.png" />
+    <Image Include="assets\Textures\body\iron_armour_feet.png" />
+    <Image Include="assets\Textures\body\iron_armour_front.png" />
+    <Image Include="assets\Textures\body\iron_armour_head.png" />
+    <Image Include="assets\Textures\body\party_hat.png" />
+    <Image Include="assets\Textures\body\slimeshoes.png" />
+    <Image Include="assets\Textures\body\sunglasses.png" />
+    <Image Include="assets\Textures\cave_bg.png" />
+    <Image Include="assets\Textures\character.png" />
+    <Image Include="assets\Textures\default.png" />
+    <Image Include="assets\Textures\default_bg.png" />
+    <Image Include="assets\Textures\desert_bg.png" />
+    <Image Include="assets\Textures\desertslime.png" />
+    <Image Include="assets\Textures\hearts.png" />
+    <Image Include="assets\Textures\iceslime.png" />
+    <Image Include="assets\Textures\inventorytextures.png" />
+    <Image Include="assets\Textures\items.png" />
+    <Image Include="assets\Textures\mumy.png" />
+    <Image Include="assets\Textures\player_feet.png" />
+    <Image Include="assets\Textures\player_head.png" />
+    <Image Include="assets\Textures\playersprite.png" />
+    <Image Include="assets\Textures\slime.png" />
+    <Image Include="assets\Textures\smallblueslime.png" />
+    <Image Include="assets\Textures\snow.png" />
+    <Image Include="assets\Textures\textures.png" />
+    <Image Include="assets\Textures\torso_back.png" />
+    <Image Include="assets\Textures\torso_front.png" />
+    <Image Include="assets\Textures\treetextures.png" />
+    <Image Include="assets\Textures\zombie.png" />
+    <Image Include="assets\Textures\zombie_eskimo.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\GLFW\GLFW.vcxproj">

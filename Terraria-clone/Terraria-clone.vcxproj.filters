@@ -13,8 +13,20 @@
     <Filter Include="Source\Game">
       <UniqueIdentifier>{BF8A170F-2B40-9004-B434-8ADB20E98608}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Game\Entity">
+      <UniqueIdentifier>{2B2A03DC-170E-C431-806E-BE846C71AEB3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Object">
+      <UniqueIdentifier>{650B78F2-51EF-3848-BA4F-339BA65223CA}</UniqueIdentifier>
+    </Filter>
     <Filter Include="assets">
       <UniqueIdentifier>{583885F2-44DA-AFC8-2D95-C31C19D63619}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\Textures">
+      <UniqueIdentifier>{2BED12B3-9778-8077-A089-036C0C94DC77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets\Textures\body">
+      <UniqueIdentifier>{6802C7AC-5491-5076-FDAF-6471E91D611C}</UniqueIdentifier>
     </Filter>
     <Filter Include="assets\shaders">
       <UniqueIdentifier>{51CD2FD9-3D9B-23DF-262F-9405129CFF43}</UniqueIdentifier>
@@ -45,7 +57,7 @@
     <ClInclude Include="Source\App\App.h">
       <Filter>Source\App</Filter>
     </ClInclude>
-    <ClInclude Include="Source\App\AppHeader.h">
+    <ClInclude Include="Source\App\DeltaTime.h">
       <Filter>Source\App</Filter>
     </ClInclude>
     <ClInclude Include="Source\App\Input.h">
@@ -57,6 +69,9 @@
     <ClInclude Include="Source\App\Render\Buffer.h">
       <Filter>Source\App\Render</Filter>
     </ClInclude>
+    <ClInclude Include="Source\App\Render\OrthographicCamera.h">
+      <Filter>Source\App\Render</Filter>
+    </ClInclude>
     <ClInclude Include="Source\App\Render\Shader.h">
       <Filter>Source\App\Render</Filter>
     </ClInclude>
@@ -66,8 +81,17 @@
     <ClInclude Include="Source\App\Window.h">
       <Filter>Source\App</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\Entity\Player.h">
+      <Filter>Source\Game\Entity</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Game\Game.h">
       <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Object\Object.h">
+      <Filter>Source\Game\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\trpch.h">
+      <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\glm\common.hpp">
       <Filter>vendor\glm\glm</Filter>
@@ -1323,12 +1347,12 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
-    <ClInclude Include="Source\App\Render\OrthographicCamera.h" />
-    <ClInclude Include="Source\Game\Object\Object.h" />
-    <ClInclude Include="Source\App\DeltaTime.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\App\App.cpp">
+      <Filter>Source\App</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\App\DeltaTime.cpp">
       <Filter>Source\App</Filter>
     </ClCompile>
     <ClCompile Include="Source\App\Input.cpp">
@@ -1338,6 +1362,9 @@
       <Filter>Source\App</Filter>
     </ClCompile>
     <ClCompile Include="Source\App\Render\Buffer.cpp">
+      <Filter>Source\App\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\App\Render\OrthographicCamera.cpp">
       <Filter>Source\App\Render</Filter>
     </ClCompile>
     <ClCompile Include="Source\App\Render\Shader.cpp">
@@ -1352,19 +1379,180 @@
     <ClCompile Include="Source\App\main.cpp">
       <Filter>Source\App</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Entity\Player.cpp">
+      <Filter>Source\Game\Entity</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Game\Game.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Source\App\Render\OrthographicCamera.cpp" />
-    <ClCompile Include="Source\Game\Object\Object.cpp" />
-    <ClCompile Include="Source\App\DeltaTime.cpp" />
+    <ClCompile Include="Source\Game\Object\Object.cpp">
+      <Filter>Source\Game\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\trpch.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\Textures\Thumbs.db">
+      <Filter>assets\Textures</Filter>
+    </None>
+    <None Include="assets\Textures\blocksdescription.txt">
+      <Filter>assets\Textures</Filter>
+    </None>
+    <None Include="assets\Textures\blocksname.txt">
+      <Filter>assets\Textures</Filter>
+    </None>
+    <None Include="assets\Textures\body\Thumbs.db">
+      <Filter>assets\Textures\body</Filter>
+    </None>
+    <None Include="assets\Textures\crafting.txt">
+      <Filter>assets\Textures</Filter>
+    </None>
+    <None Include="assets\Textures\font.ttf">
+      <Filter>assets\Textures</Filter>
+    </None>
+    <None Include="assets\Textures\itemsdescription.txt">
+      <Filter>assets\Textures</Filter>
+    </None>
+    <None Include="assets\Textures\itemsname.txt">
+      <Filter>assets\Textures</Filter>
+    </None>
     <None Include="assets\shaders\default.frag">
       <Filter>assets\shaders</Filter>
     </None>
     <None Include="assets\shaders\default.vert">
       <Filter>assets\shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\Textures\blueslime.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\copper_armour_back.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\copper_armour_feet.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\copper_armour_front.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\copper_armour_head.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\gold_armour_back.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\gold_armour_feet.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\gold_armour_front.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\gold_armour_head.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\ice_armour_back.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\ice_armour_feet.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\ice_armour_front.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\ice_armour_head.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\iron_armour_back.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\iron_armour_feet.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\iron_armour_front.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\iron_armour_head.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\party_hat.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\slimeshoes.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\body\sunglasses.png">
+      <Filter>assets\Textures\body</Filter>
+    </Image>
+    <Image Include="assets\Textures\cave_bg.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\character.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\default.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\default_bg.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\desert_bg.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\desertslime.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\hearts.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\iceslime.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\inventorytextures.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\items.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\mumy.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\player_feet.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\player_head.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\playersprite.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\slime.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\smallblueslime.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\snow.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\textures.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\torso_back.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\torso_front.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\treetextures.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\zombie.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
+    <Image Include="assets\Textures\zombie_eskimo.png">
+      <Filter>assets\Textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>

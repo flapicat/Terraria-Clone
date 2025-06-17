@@ -1,3 +1,4 @@
+#include "trpch.h"
 #include "Shader.h"
 
 Shader::Shader(const char* pathVertShader, const char* pathFragShader)

@@ -1,7 +1,4 @@
 #pragma once
-#include <string>
-#include "Log.h"
-
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
@@ -28,4 +25,3 @@ private:
 	GLFWwindow* m_window = nullptr;
 	WindowData m_Windata;
 };
-

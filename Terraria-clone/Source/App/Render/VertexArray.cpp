@@ -1,3 +1,4 @@
+#include "trpch.h"
 #include "VertexArray.h"
 
 VertexArray::VertexArray()

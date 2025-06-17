@@ -1,3 +1,4 @@
+#include "trpch.h"
 #include "Object.h"
 
 void Object::UpdateModel()

@@ -1,3 +1,4 @@
+#include "trpch.h"
 #include "App.h"
 
 App* App::s_Instance = nullptr;

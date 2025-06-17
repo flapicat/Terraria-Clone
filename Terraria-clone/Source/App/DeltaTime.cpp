@@ -1,3 +1,4 @@
+#include "trpch.h"
 #include "DeltaTime.h"
 
 void DeltaTime::updateDeltaTime()

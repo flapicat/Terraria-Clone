@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Render/VertexArray.h"
-#include "Render/Buffer.h"
+#include "DeltaTime.h"
+
 #include "Render/Shader.h"
 #include "Render/OrthographicCamera.h"
 
-#include "Object/Object.h"
+#include "Entity/Player.h"
 
 class App;
 
@@ -19,10 +19,8 @@ public:
 private:
 	void handleInput(); 
 	std::unique_ptr<Shader> m_shader;
-	std::shared_ptr<VertexArray> m_VA;
 	OrthographicCamera m_camera;
-
-	Object object;
+	Player m_player;
 
 	App* m_app;
 };

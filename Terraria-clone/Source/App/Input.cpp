@@ -1,3 +1,4 @@
+#include "trpch.h"
 #include "Input.h"
 
 Input* Input::s_instance = new Input;

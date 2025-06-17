@@ -1,3 +1,4 @@
+#include "trpch.h"
 #include "Window.h"
 
 Window::Window(WindowData& data)
@@ -51,9 +52,41 @@ void Window::CreateOpenGLWindow(WindowData& data)
         {
             LOG_INFO("Window closed");
         });
+
+    glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, int width, int height) {
+            glViewport(0, 0, width, height);
+            //LOG_INFO("Framebuffer resized to {0}x{1}", width, height);
+        });
+
+    glfwSetKeyCallback(m_window, [](GLFWwindow* window, int key, int scancode, int action, int mods) {
+            if (action == GLFW_PRESS){
+                //LOG_INFO("Key pressed: {0}", key);
+            }
+            else if (action == GLFW_RELEASE){
+                //LOG_INFO("Key Released: {0}", key);
+            }
+        });
+
+    glfwSetMouseButtonCallback(m_window, [](GLFWwindow* window, int button, int action, int mods) {
+            if (action == GLFW_PRESS){
+                //LOG_INFO("Mouse Button Pressed: {0}", button);
+            }
+            else if (action == GLFW_RELEASE){
+                //LOG_INFO("Mouse Button Released: {0}", button);
+            }
+        });
+
+    glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double xpos, double ypos) {
+            //LOG_INFO("Mouse moved to: ({}, {})", xpos, ypos);
+        });
+
+    glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xoffset, double yoffset) {
+            //LOG_INFO("Scroll: ({}, {})", xoffset, yoffset);
+        });
 }
 
 void Window::Destroy()
 {
 	glfwDestroyWindow(m_window);
 }
+

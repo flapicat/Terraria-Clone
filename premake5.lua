@@ -33,6 +33,9 @@ project "Terraria-clone"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
+	pchheader "trpch.h"
+	pchsource "%{prj.name}/Source/trpch.cpp"
+
 	files
 	{
 		"%{prj.name}/assets/**",
@@ -40,6 +43,8 @@ project "Terraria-clone"
 		"%{prj.name}/Source/App/**.cpp",
 		"%{prj.name}/Source/Game/**.h",
 		"%{prj.name}/Source/Game/**.cpp",
+		"%{prj.name}/Source/**.h",
+		"%{prj.name}/Source/**.cpp",
 
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
@@ -52,6 +57,7 @@ project "Terraria-clone"
 
 	includedirs
 	{
+		"%{prj.name}/Source",
 		"%{prj.name}/Source/App",
 		"%{prj.name}/Source/Game",
 		"%{prj.name}/vendor/spdlog/include",

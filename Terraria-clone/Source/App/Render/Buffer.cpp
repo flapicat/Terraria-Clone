@@ -1,3 +1,4 @@
+#include "trpch.h"
 #include "Buffer.h"
 
 VertexBuffer::VertexBuffer(float* vertices, unsigned int size)
