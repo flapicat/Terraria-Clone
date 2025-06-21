@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Render/VertexData.h"
 #include "Render/VertexArray.h"
 #include "Render/Buffer.h"
 #include "Render/Shader.h"
@@ -11,20 +12,30 @@ class Player : public Object
 public:
 	Player();
 	void update();
-	void render(std::unique_ptr<Shader>& shader);
+	void render(const std::shared_ptr<Shader>& shader);
 	void input();
 private:
-    float playerSpeed = 100;
-    float vertices[12] = {
-         50.5f,  100.5f, 0.0f,
-         50.5f, -100.5f, 0.0f,
-        -50.5f, -100.5f, 0.0f,
-        -50.5f,  100.5f, 0.0f
+    float playerSpeed = 100; 
+    std::vector<float> FloatVertices;
+
+    std::vector<glm::vec3> vertexPos = {
+        { 50.0f,  100.0f, 0.0f },
+        { 50.0f, -100.0f, 0.0f },
+        {-50.0f, -100.0f, 0.0f },
+        {-50.0f,  100.0f, 0.0f }
     };
-    unsigned int indices[6] = {
+    std::vector<glm::vec2> vertexTexCords = {
+        {0.0f, 0.0f},
+        {0.0f, 0.0f},
+        {0.0f, 0.0f},
+        {0.0f, 0.0f}
+    };
+
+    std::vector<unsigned int> indices = {
         0, 1, 3,
         1, 2, 3
     };
+
     std::shared_ptr<VertexArray> m_VA;
 };
 

@@ -1,17 +1,21 @@
 #include "trpch.h"
 #include "Player.h"
-
 #include "input.h"
 
 Player::Player()
 {
-    m_VA = std::make_unique<VertexArray>();
+    std::vector<Vertex::Vertex> VertexVertices = Vertex::CreateVertex(vertexPos, &vertexTexCords);
+    FloatVertices = Vertex::CreateVerticesFloat(VertexVertices);
+
+    m_VA.reset(new VertexArray());
     m_VA->bind();
-    
-    std::shared_ptr<VertexBuffer> VB = std::make_unique<VertexBuffer>(vertices, sizeof(vertices));
-    std::shared_ptr<IndexBuffer>  IB = std::make_unique<IndexBuffer>(indices, sizeof(indices) / sizeof(unsigned int));
-    
+
+    std::shared_ptr<VertexBuffer> VB; 
+    VB.reset(new VertexBuffer(FloatVertices.data() , FloatVertices.size() * sizeof(float)));
     m_VA->setVertexBuffer(VB);
+
+    std::shared_ptr<IndexBuffer>  IB; 
+    IB.reset(new IndexBuffer(indices.data() , indices.size()));
     m_VA->setIndexBuffer(IB);
     
     m_VA->unbind();
@@ -22,11 +26,13 @@ void Player::update()
     input();
 }
 
-void Player::render(std::unique_ptr<Shader>& shader)
+void Player::render(const std::shared_ptr<Shader>& shader)
 {
     this->UpdateModel();
+
     shader->use();
     shader->setMat4("u_Model", this->GetModel());
+    shader->setInt("u_Texture", 0);
 
     m_VA->bind();
     glDrawElements(GL_TRIANGLES, m_VA->getIndexBuffer()->GetCount(), GL_UNSIGNED_INT, 0);

@@ -52,6 +52,9 @@
     <Filter Include="vendor\glm\glm\gtx">
       <UniqueIdentifier>{B3A6A76B-9F8A-68C1-08EB-6214F4ED5243}</UniqueIdentifier>
     </Filter>
+    <Filter Include="vendor\stb">
+      <UniqueIdentifier>{8BD3C5A8-778B-07F6-E092-E051CC69A2E6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\App\App.h">
@@ -73,6 +76,9 @@
       <Filter>Source\App\Render</Filter>
     </ClInclude>
     <ClInclude Include="Source\App\Render\Shader.h">
+      <Filter>Source\App\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\App\Render\Texture.h">
       <Filter>Source\App\Render</Filter>
     </ClInclude>
     <ClInclude Include="Source\App\Render\VertexArray.h">
@@ -1347,6 +1353,15 @@
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp">
       <Filter>vendor\glm\glm</Filter>
     </ClInclude>
+    <ClInclude Include="vendor\stb\stb_image.h">
+      <Filter>vendor\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\App\Render\TextureCoord.h" />
+    <ClInclude Include="Source\App\Assets.h" />
+    <ClInclude Include="Source\App\Render\VertexData.h" />
+    <ClInclude Include="Source\Game\Map\Block.h" />
+    <ClInclude Include="Source\Game\Map\Blocks.h" />
+    <ClInclude Include="Source\Game\Map\Map.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\App\App.cpp">
@@ -1370,6 +1385,9 @@
     <ClCompile Include="Source\App\Render\Shader.cpp">
       <Filter>Source\App\Render</Filter>
     </ClCompile>
+    <ClCompile Include="Source\App\Render\Texture.cpp">
+      <Filter>Source\App\Render</Filter>
+    </ClCompile>
     <ClCompile Include="Source\App\Render\VertexArray.cpp">
       <Filter>Source\App\Render</Filter>
     </ClCompile>
@@ -1377,6 +1395,9 @@
       <Filter>Source\App</Filter>
     </ClCompile>
     <ClCompile Include="Source\App\main.cpp">
+      <Filter>Source\App</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\App\stb.cpp">
       <Filter>Source\App</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Entity\Player.cpp">
@@ -1391,6 +1412,9 @@
     <ClCompile Include="Source\trpch.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\App\Assets.cpp" />
+    <ClCompile Include="Source\Game\Map\Block.cpp" />
+    <ClCompile Include="Source\Game\Map\Map.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Textures\Thumbs.db">
@@ -1417,10 +1441,10 @@
     <None Include="assets\Textures\itemsname.txt">
       <Filter>assets\Textures</Filter>
     </None>
-    <None Include="assets\shaders\default.frag">
+    <None Include="assets\shaders\TextureShader.frag">
       <Filter>assets\shaders</Filter>
     </None>
-    <None Include="assets\shaders\default.vert">
+    <None Include="assets\shaders\TextureShader.vert">
       <Filter>assets\shaders</Filter>
     </None>
   </ItemGroup>

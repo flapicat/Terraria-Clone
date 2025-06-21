@@ -48,6 +48,7 @@ project "Terraria-clone"
 
 		"%{prj.name}/vendor/glm/glm/**.hpp",
 		"%{prj.name}/vendor/glm/glm/**.inl",
+		"%{prj.name}/vendor/stb/**.h",
 	}
 
 	defines
@@ -60,6 +61,7 @@ project "Terraria-clone"
 		"%{prj.name}/Source",
 		"%{prj.name}/Source/App",
 		"%{prj.name}/Source/Game",
+		"%{prj.name}/vendor/",
 		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",

@@ -60,7 +60,7 @@
       <PrecompiledHeaderFile>trpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Source;Source\App;Source\Game;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Source;Source\App;Source\Game;vendor;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>trpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Source;Source\App;Source\Game;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Source;Source\App;Source\Game;vendor;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -100,16 +100,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Source\App\App.h" />
+    <ClInclude Include="Source\App\Assets.h" />
     <ClInclude Include="Source\App\DeltaTime.h" />
     <ClInclude Include="Source\App\Input.h" />
     <ClInclude Include="Source\App\Log.h" />
     <ClInclude Include="Source\App\Render\Buffer.h" />
     <ClInclude Include="Source\App\Render\OrthographicCamera.h" />
     <ClInclude Include="Source\App\Render\Shader.h" />
+    <ClInclude Include="Source\App\Render\Texture.h" />
+    <ClInclude Include="Source\App\Render\TextureCoord.h" />
     <ClInclude Include="Source\App\Render\VertexArray.h" />
+    <ClInclude Include="Source\App\Render\VertexData.h" />
     <ClInclude Include="Source\App\Window.h" />
     <ClInclude Include="Source\Game\Entity\Player.h" />
     <ClInclude Include="Source\Game\Game.h" />
+    <ClInclude Include="Source\Game\Map\Block.h" />
+    <ClInclude Include="Source\Game\Map\Blocks.h" />
+    <ClInclude Include="Source\Game\Map\Map.h" />
     <ClInclude Include="Source\Game\Object\Object.h" />
     <ClInclude Include="Source\trpch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
@@ -530,20 +537,26 @@
     <ClInclude Include="vendor\glm\glm\vec3.hpp" />
     <ClInclude Include="vendor\glm\glm\vec4.hpp" />
     <ClInclude Include="vendor\glm\glm\vector_relational.hpp" />
+    <ClInclude Include="vendor\stb\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\App\App.cpp" />
+    <ClCompile Include="Source\App\Assets.cpp" />
     <ClCompile Include="Source\App\DeltaTime.cpp" />
     <ClCompile Include="Source\App\Input.cpp" />
     <ClCompile Include="Source\App\Log.cpp" />
     <ClCompile Include="Source\App\Render\Buffer.cpp" />
     <ClCompile Include="Source\App\Render\OrthographicCamera.cpp" />
     <ClCompile Include="Source\App\Render\Shader.cpp" />
+    <ClCompile Include="Source\App\Render\Texture.cpp" />
     <ClCompile Include="Source\App\Render\VertexArray.cpp" />
     <ClCompile Include="Source\App\Window.cpp" />
     <ClCompile Include="Source\App\main.cpp" />
+    <ClCompile Include="Source\App\stb.cpp" />
     <ClCompile Include="Source\Game\Entity\Player.cpp" />
     <ClCompile Include="Source\Game\Game.cpp" />
+    <ClCompile Include="Source\Game\Map\Block.cpp" />
+    <ClCompile Include="Source\Game\Map\Map.cpp" />
     <ClCompile Include="Source\Game\Object\Object.cpp" />
     <ClCompile Include="Source\trpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
@@ -558,8 +571,8 @@
     <None Include="assets\Textures\font.ttf" />
     <None Include="assets\Textures\itemsdescription.txt" />
     <None Include="assets\Textures\itemsname.txt" />
-    <None Include="assets\shaders\default.frag" />
-    <None Include="assets\shaders\default.vert" />
+    <None Include="assets\shaders\TextureShader.frag" />
+    <None Include="assets\shaders\TextureShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Textures\blueslime.png" />

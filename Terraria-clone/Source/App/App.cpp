@@ -1,5 +1,6 @@
 #include "trpch.h"
 #include "App.h"
+#include "Input.h"
 
 App* App::s_Instance = nullptr;
 
@@ -18,6 +19,7 @@ void App::Run()
 {
     while (running) 
     {
+        HandleInput();
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -36,5 +38,13 @@ void App::Run()
     }
 
     glfwTerminate();
+}
+
+void App::HandleInput()
+{
+    if (Input::IskeyPressed(GLFW_KEY_ESCAPE))
+    {
+        running = false;
+    }
 }
 

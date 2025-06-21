@@ -2,9 +2,9 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+#include "DeltaTime.h"
 #include "Log.h"
 #include "Window.h"
-#include "DeltaTime.h"
 
 #include "Game.h"
 
@@ -13,6 +13,7 @@ class App
 public:
 	App();
 	void Run();
+	void HandleInput();
 
 	std::unique_ptr<Window>& GetWindow() { return m_window; };
 	static App* Get() { return s_Instance; };
