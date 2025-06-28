@@ -3,6 +3,7 @@
 
 int main() 
 {
+    std::srand(time(NULL));
     Log::init();
     LOG_INFO("LOG initialized");
     auto app = new App;

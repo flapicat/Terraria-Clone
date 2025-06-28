@@ -16,8 +16,8 @@
     <Filter Include="Source\Game\Entity">
       <UniqueIdentifier>{2B2A03DC-170E-C431-806E-BE846C71AEB3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Game\Object">
-      <UniqueIdentifier>{650B78F2-51EF-3848-BA4F-339BA65223CA}</UniqueIdentifier>
+    <Filter Include="Source\Game\Map">
+      <UniqueIdentifier>{8CEC6791-F877-D555-0189-584A6D933156}</UniqueIdentifier>
     </Filter>
     <Filter Include="assets">
       <UniqueIdentifier>{583885F2-44DA-AFC8-2D95-C31C19D63619}</UniqueIdentifier>
@@ -60,6 +60,9 @@
     <ClInclude Include="Source\App\App.h">
       <Filter>Source\App</Filter>
     </ClInclude>
+    <ClInclude Include="Source\App\Assets.h">
+      <Filter>Source\App</Filter>
+    </ClInclude>
     <ClInclude Include="Source\App\DeltaTime.h">
       <Filter>Source\App</Filter>
     </ClInclude>
@@ -81,11 +84,20 @@
     <ClInclude Include="Source\App\Render\Texture.h">
       <Filter>Source\App\Render</Filter>
     </ClInclude>
+    <ClInclude Include="Source\App\Render\TextureCoord.h">
+      <Filter>Source\App\Render</Filter>
+    </ClInclude>
     <ClInclude Include="Source\App\Render\VertexArray.h">
+      <Filter>Source\App\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\App\Render\VertexData.h">
       <Filter>Source\App\Render</Filter>
     </ClInclude>
     <ClInclude Include="Source\App\Window.h">
       <Filter>Source\App</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Entity\Entity.h">
+      <Filter>Source\Game\Entity</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Entity\Player.h">
       <Filter>Source\Game\Entity</Filter>
@@ -93,8 +105,14 @@
     <ClInclude Include="Source\Game\Game.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Object\Object.h">
-      <Filter>Source\Game\Object</Filter>
+    <ClInclude Include="Source\Game\Map\Block.h">
+      <Filter>Source\Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Map\Blocks.h">
+      <Filter>Source\Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Map\Map.h">
+      <Filter>Source\Game\Map</Filter>
     </ClInclude>
     <ClInclude Include="Source\trpch.h">
       <Filter>Source</Filter>
@@ -1356,15 +1374,14 @@
     <ClInclude Include="vendor\stb\stb_image.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
-    <ClInclude Include="Source\App\Render\TextureCoord.h" />
-    <ClInclude Include="Source\App\Assets.h" />
-    <ClInclude Include="Source\App\Render\VertexData.h" />
-    <ClInclude Include="Source\Game\Map\Block.h" />
-    <ClInclude Include="Source\Game\Map\Blocks.h" />
-    <ClInclude Include="Source\Game\Map\Map.h" />
+    <ClInclude Include="Source\Game\Map\NoiseGeneration.h" />
+    <ClInclude Include="Source\Game\Map\FastNoiseLite.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\App\App.cpp">
+      <Filter>Source\App</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\App\Assets.cpp">
       <Filter>Source\App</Filter>
     </ClCompile>
     <ClCompile Include="Source\App\DeltaTime.cpp">
@@ -1400,21 +1417,25 @@
     <ClCompile Include="Source\App\stb.cpp">
       <Filter>Source\App</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Entity\Entity.cpp">
+      <Filter>Source\Game\Entity</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Game\Entity\Player.cpp">
       <Filter>Source\Game\Entity</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Game.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Object\Object.cpp">
-      <Filter>Source\Game\Object</Filter>
+    <ClCompile Include="Source\Game\Map\Block.cpp">
+      <Filter>Source\Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\Map\Map.cpp">
+      <Filter>Source\Game\Map</Filter>
     </ClCompile>
     <ClCompile Include="Source\trpch.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\App\Assets.cpp" />
-    <ClCompile Include="Source\Game\Map\Block.cpp" />
-    <ClCompile Include="Source\Game\Map\Map.cpp" />
+    <ClCompile Include="Source\Game\Map\NoiseGeneration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Textures\Thumbs.db">

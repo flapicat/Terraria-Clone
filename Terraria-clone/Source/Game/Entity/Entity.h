@@ -4,10 +4,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-class Object
+class Entity
 {
 public:
-	Object() {};
+	Entity() {};
 
 	void UpdateModel();
 

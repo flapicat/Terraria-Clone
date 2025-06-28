@@ -6,20 +6,25 @@
 #include "Render/VertexArray.h"
 #include "Render/Buffer.h"
 
+#include "NoiseGeneration.h"
+
 class Map
 {
 public:
 	Map(int width, int height);
 
-	const std::vector<float>& GetVertices() const { return vertices; }
-	const std::vector<unsigned int>& GetIndices() const { return indices; }
-
 	void render(const std::shared_ptr<Shader>& shader);
 private:
-	int MapWidth, MapHeight;
-	std::vector<float> vertices;
-	std::vector<unsigned int> indices;
+	int MapWidth, MapHeight; 
+	std::vector<std::string> mapMatrix;
 	std::shared_ptr<VertexArray> m_VA;
 private:
-	void generate();
+	void generate(std::vector<float>& vertices, std::vector<unsigned int>& indices);
+};
+
+inline std::unordered_map<char, std::vector<glm::vec2>> texCashe =
+{
+	{ 'G', Blocks[GRASS1].GetTexCoords() },
+	{ 'S', Blocks[STONE1].GetTexCoords() },
+	{ 'X', Blocks[DIRT1].GetTexCoords() },
 };

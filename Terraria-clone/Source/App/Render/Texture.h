@@ -45,11 +45,3 @@ private:
 };
 
 void setBlockTexture(std::vector<glm::vec2>& vertexTexCords, TextureCoords texture);
-
-namespace TextureName
-{
-	constexpr TextureCoords AIR(71,7);
-	constexpr TextureCoords DIRT_TEXTURE_1(2, 1);
-	constexpr TextureCoords DIRT_TEXTURE_2(2, 2);
-	constexpr TextureCoords GRASS_TEXTURE_1(3, 1);
-}

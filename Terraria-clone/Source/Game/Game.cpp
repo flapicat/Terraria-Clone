@@ -3,7 +3,7 @@
 #include "Input.h"
 
 Game::Game()
-    :m_camera(-1600, 1600, -900, 900), map(60,50)
+    :m_camera(-1600, 1600, -900, 900), map(4200,1200)
 {
     LoadAssets();
     m_camera.SetPosition(glm::vec3(0.0f,0.0f,0.0f));

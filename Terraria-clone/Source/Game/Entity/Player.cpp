@@ -4,6 +4,18 @@
 
 Player::Player()
 {
+    std::vector<glm::vec3> vertexPos = {
+        { 30.0f,  60.0f, 0.0f },
+        { 30.0f, -60.0f, 0.0f },
+        {-30.0f, -60.0f, 0.0f },
+        {-30.0f,  60.0f, 0.0f }
+    };
+
+    std::vector<unsigned int> indices = {
+        0, 1, 3,
+        1, 2, 3
+    };
+
     std::vector<Vertex::Vertex> VertexVertices = Vertex::CreateVertex(vertexPos, &vertexTexCords);
     FloatVertices = Vertex::CreateVerticesFloat(VertexVertices);
 
@@ -58,6 +70,14 @@ void Player::input()
     if (Input::IskeyPressed(GLFW_KEY_S))
     {
         pos.y -= 10.0f * playerSpeed * deltaTime;
+    }
+    if (Input::IskeyPressed(GLFW_KEY_LEFT_CONTROL))
+    {
+        playerSpeed = 1000;
+    }
+    else
+    {
+        playerSpeed = 100;
     }
     this->setPosition(pos);
 }

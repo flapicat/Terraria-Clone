@@ -1,7 +1,7 @@
 #include "trpch.h"
-#include "Object.h"
+#include "Entity.h"
 
-void Object::UpdateModel()
+void Entity::UpdateModel()
 {
     m_model = glm::mat4(1.0f);
     m_model = glm::translate(m_model, m_position);
