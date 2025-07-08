@@ -7,7 +7,8 @@ inline std::vector<Block> Blocks = {
 	Block(TextureName::DIRT_TEXTURE_1),
 	Block(TextureName::DIRT_TEXTURE_2),
 	Block(TextureName::GRASS_TEXTURE_1),
-	Block(TextureName::STONE_TEXTURE_1)
+	Block(TextureName::STONE_TEXTURE_1),
+	Block(TextureName::SAND_TEXTURE_1)
 };
 
 enum BLOCKS
@@ -17,4 +18,5 @@ enum BLOCKS
 	DIRT2 = 2,
 	GRASS1 = 3,
 	STONE1 = 4,
+	SAND1 = 5,
 };

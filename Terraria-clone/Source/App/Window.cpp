@@ -81,6 +81,19 @@ void Window::CreateOpenGLWindow(WindowData& data)
         });
 
     glfwSetScrollCallback(m_window, [](GLFWwindow* window, double xoffset, double yoffset) {
+            if (yoffset > 0)
+            {
+                m_ScrollUp = true;
+            }
+            else if (yoffset < 0)
+            {
+                m_ScrollDown = true;
+            }
+            else
+            {
+                m_ScrollUp = false;
+                m_ScrollDown = false;
+            }
             //LOG_INFO("Scroll: ({}, {})", xoffset, yoffset);
         });
 }

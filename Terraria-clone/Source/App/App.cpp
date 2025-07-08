@@ -1,6 +1,7 @@
-#include "trpch.h"
+﻿#include "trpch.h"
 #include "App.h"
 #include "Input.h"
+
 
 App* App::s_Instance = nullptr;
 
@@ -25,7 +26,7 @@ void App::Run()
 
         //UPDATE
         DeltaTime::updateDeltaTime();
-        if (glfwWindowShouldClose(m_window->GetNativeWindow()))
+        if (glfwWindowShouldClose(m_window->GetWindowPointer()))
         {
             running = false;
         }
@@ -33,6 +34,7 @@ void App::Run()
 
         //RENDER
         m_game->render();
+
 
         m_window->update();
     }

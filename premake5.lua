@@ -66,6 +66,7 @@ project "Terraria-clone"
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
+		"%{IncludeDir.ImGui}/backends",
 		"%{IncludeDir.glm}"
 	}
 
@@ -76,6 +77,10 @@ project "Terraria-clone"
 		"ImGui",
 		"glm",
 		"opengl32.lib"
+	}
+	
+	postbuildcommands {
+		"{COPY} %{prj.location}/assets %{cfg.buildtarget.directory}/assets"
 	}
 
 	filter "system:windows"

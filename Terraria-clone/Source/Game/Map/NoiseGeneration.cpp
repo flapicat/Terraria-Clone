@@ -40,7 +40,7 @@ void GenertateTerrain(int mapWidth, int mapHeight, std::vector<std::string>& Map
         }
     }
 
-    ////CAVES
+    //CAVES
     randomSeed = rand();
     FastNoiseLite caveNoise;
     caveNoise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);

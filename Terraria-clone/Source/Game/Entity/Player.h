@@ -13,8 +13,15 @@ public:
 	Player();
 	void update();
 	void render(const std::shared_ptr<Shader>& shader);
+    void SetPlayerPositionBasedOnBlocks(glm::vec3& position);
+    glm::vec3 GetPlayerPositionBasedOnBlocks() const;
+    void SetPlayerHeightBasedOnBlocks(int height);
+    int GetPlayerHeight() const { return playerHeight; };
+    glm::vec2 GetMouseWorldPos(const glm::mat4& viewProj, float width, float height);
+    glm::vec2 GetMousePosBasedOnBlocks(const glm::mat4& viewProj, float width, float height);
 	void input();
 private:
+    int playerHeight = 2;
     float playerSpeed = 100; 
     std::vector<float> FloatVertices;
 

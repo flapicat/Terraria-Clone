@@ -24,4 +24,5 @@ namespace TextureName
     constexpr TextureCoords DIRT_TEXTURE_2(2, 2);
     constexpr TextureCoords GRASS_TEXTURE_1(3, 1);
     constexpr TextureCoords STONE_TEXTURE_1(4, 1);
+    constexpr TextureCoords SAND_TEXTURE_1(6, 1);
 }

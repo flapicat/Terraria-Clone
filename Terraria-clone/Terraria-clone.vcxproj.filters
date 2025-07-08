@@ -19,6 +19,9 @@
     <Filter Include="Source\Game\Map">
       <UniqueIdentifier>{8CEC6791-F877-D555-0189-584A6D933156}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\ImGui">
+      <UniqueIdentifier>{000933F2-EC6B-C296-95F1-FA4C81338E19}</UniqueIdentifier>
+    </Filter>
     <Filter Include="assets">
       <UniqueIdentifier>{583885F2-44DA-AFC8-2D95-C31C19D63619}</UniqueIdentifier>
     </Filter>
@@ -111,8 +114,17 @@
     <ClInclude Include="Source\Game\Map\Blocks.h">
       <Filter>Source\Game\Map</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\Map\FastNoiseLite.h">
+      <Filter>Source\Game\Map</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Game\Map\Map.h">
       <Filter>Source\Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Map\NoiseGeneration.h">
+      <Filter>Source\Game\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ImGui\ImGuiAPI.h">
+      <Filter>Source\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="Source\trpch.h">
       <Filter>Source</Filter>
@@ -1374,8 +1386,6 @@
     <ClInclude Include="vendor\stb\stb_image.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Map\NoiseGeneration.h" />
-    <ClInclude Include="Source\Game\Map\FastNoiseLite.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\App\App.cpp">
@@ -1432,10 +1442,15 @@
     <ClCompile Include="Source\Game\Map\Map.cpp">
       <Filter>Source\Game\Map</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Map\NoiseGeneration.cpp">
+      <Filter>Source\Game\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ImGui\ImGuiAPI.cpp">
+      <Filter>Source\ImGui</Filter>
+    </ClCompile>
     <ClCompile Include="Source\trpch.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Map\NoiseGeneration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Textures\Thumbs.db">

@@ -60,7 +60,7 @@
       <PrecompiledHeaderFile>trpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Source;Source\App;Source\Game;vendor;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Source;Source\App;Source\Game;vendor;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\imgui\backends;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -73,6 +73,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST $(ProjectDir)\assets\ (xcopy /Q /E /Y /I $(ProjectDir)\assets $(TargetDir)\assets &gt; nul) ELSE (xcopy /Q /Y /I $(ProjectDir)\assets $(TargetDir)\assets &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -80,7 +83,7 @@
       <PrecompiledHeaderFile>trpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>Source;Source\App;Source\Game;vendor;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Source;Source\App;Source\Game;vendor;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\imgui\backends;vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -97,10 +100,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>IF EXIST $(ProjectDir)\assets\ (xcopy /Q /E /Y /I $(ProjectDir)\assets $(TargetDir)\assets &gt; nul) ELSE (xcopy /Q /Y /I $(ProjectDir)\assets $(TargetDir)\assets &gt; nul)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Game\Map\FastNoiseLite.h" />
-    <ClInclude Include="Source\Game\Map\NoiseGeneration.h" />
     <ClInclude Include="Source\App\App.h" />
     <ClInclude Include="Source\App\Assets.h" />
     <ClInclude Include="Source\App\DeltaTime.h" />
@@ -119,7 +123,10 @@
     <ClInclude Include="Source\Game\Game.h" />
     <ClInclude Include="Source\Game\Map\Block.h" />
     <ClInclude Include="Source\Game\Map\Blocks.h" />
+    <ClInclude Include="Source\Game\Map\FastNoiseLite.h" />
     <ClInclude Include="Source\Game\Map\Map.h" />
+    <ClInclude Include="Source\Game\Map\NoiseGeneration.h" />
+    <ClInclude Include="Source\ImGui\ImGuiAPI.h" />
     <ClInclude Include="Source\trpch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -542,7 +549,6 @@
     <ClInclude Include="vendor\stb\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Game\Map\NoiseGeneration.cpp" />
     <ClCompile Include="Source\App\App.cpp" />
     <ClCompile Include="Source\App\Assets.cpp" />
     <ClCompile Include="Source\App\DeltaTime.cpp" />
@@ -561,6 +567,8 @@
     <ClCompile Include="Source\Game\Game.cpp" />
     <ClCompile Include="Source\Game\Map\Block.cpp" />
     <ClCompile Include="Source\Game\Map\Map.cpp" />
+    <ClCompile Include="Source\Game\Map\NoiseGeneration.cpp" />
+    <ClCompile Include="Source\ImGui\ImGuiAPI.cpp" />
     <ClCompile Include="Source\trpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

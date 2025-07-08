@@ -15,8 +15,8 @@ public:
 	void Run();
 	void HandleInput();
 
-	std::unique_ptr<Window>& GetWindow() { return m_window; };
-	static App* Get() { return s_Instance; };
+	inline Window& GetWindow() { return *m_window; }
+	inline static App& Get() { return *s_Instance; }
 private:
 	static App* s_Instance;
 	bool running = true;

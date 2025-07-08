@@ -9,6 +9,9 @@ Map::Map(int width, int height)
 	GenertateTerrain(MapWidth, MapHeight, mapMatrix);
 	generate(vertices, indices);
 
+	LOG_INFO("Map generated");
+	LOG_INFO("MAP SIZE: {0}, {1}", GetMapSize().x, GetMapSize().y);
+
 	m_VA.reset(new VertexArray());
 	m_VA->bind();
 
@@ -34,6 +37,73 @@ void Map::render(const std::shared_ptr<Shader>& shader)
 	m_VA->bind();
 	glDrawElements(GL_TRIANGLES, m_VA->getIndexBuffer()->GetCount(), GL_UNSIGNED_INT, 0);
 	Textures::blocksTexture.unbind(); 
+}
+
+int Map::getHeightBasedOnX(int xPos) const
+{
+	//FUNCTION SET PLAYER POS AT THE BEGINING ABOVE GROUND
+	int count = 0;
+	for (int i = 0; i < GetMapSize().y; i++)
+	{
+		char a = GetMapMatrix()[count][xPos];
+		if (a == 'A')
+			count++;
+		else
+			break;
+	}
+	return ((MapHeight - count) - ((MapHeight / 2) + MapHeight / 6)); //I DONT KNOW WHAT IS GOING ON BUT WORKS
+}
+
+void Map::EraseBlockAtPos(int width, int height)
+{
+	int column = width + MapWidth / 2;
+	int row = (MapHeight / 2 - MapHeight / 6) - height;
+	char beforeTile;
+
+	if (column >= 0 && column < MapWidth && row >= 0 && row < MapHeight)
+	{
+		if (mapMatrix[row][column] != 'A')
+		{
+			beforeTile = mapMatrix[row][column];
+			mapMatrix[row][column] = 'A';
+			ReloadAllMap();
+		}
+	}
+}
+
+void Map::PlaceBlockAtPos(int width, int height, char blockType)
+{
+	int column = width + MapWidth / 2;
+	int row = (MapHeight / 2 - MapHeight / 6) - height;
+	char beforeTile;
+
+	if (column >= 0 && column < MapWidth && row >= 0 && row < MapHeight)
+	{
+		if (mapMatrix[row][column] != blockType)
+		{
+			beforeTile = mapMatrix[row][column];
+			mapMatrix[row][column] = blockType;
+			ReloadAllMap();
+		}
+	}
+}
+
+void Map::ReloadAllMap()
+{
+	std::vector<float> vertices;
+	std::vector<unsigned int> indices;
+	generate(vertices, indices);
+
+	m_VA = std::make_shared<VertexArray>();
+	m_VA->bind();
+	
+	std::shared_ptr<VertexBuffer> VB = std::make_shared<VertexBuffer>(vertices.data(), vertices.size() * sizeof(float));
+	m_VA->setVertexBuffer(VB);
+	
+	std::shared_ptr<IndexBuffer> IB = std::make_shared<IndexBuffer>(indices.data(), indices.size());
+	m_VA->setIndexBuffer(IB);
+	
+	m_VA->unbind();
 }
 
 void Map::generate(std::vector<float>& vertices, std::vector<unsigned int>& indices)
@@ -81,6 +151,4 @@ void Map::generate(std::vector<float>& vertices, std::vector<unsigned int>& indi
 			offset += 4;
 		}
 	}
-
-	LOG_INFO("Map generated");
 }
