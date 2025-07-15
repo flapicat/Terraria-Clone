@@ -37,7 +37,6 @@ Player::Player()
 
 void Player::update()
 {
-    input();
 }
 
 void Player::render(const std::shared_ptr<Shader>& shader)
@@ -92,7 +91,7 @@ glm::vec2 Player::GetMousePosBasedOnBlocks(const glm::mat4& viewProj, float widt
     return glm::vec2(floor(pos.x/60),floor(pos.y/60));
 }
 
-void Player::input()
+void Player::input(glm::vec2 mapSize)
 {
     //LOG_WARN("POS: {0},{1},{2}", GetPlayerPositionBasedOnBlocks().x, GetPlayerPositionBasedOnBlocks().y , GetPlayerPositionBasedOnBlocks().z);
     float deltaTime = DeltaTime::getDeltaTime();
@@ -101,10 +100,18 @@ void Player::input()
     if (Input::IskeyPressed(GLFW_KEY_A))
     {
         pos.x -= 10.0f * playerSpeed * deltaTime;
+        if (pos.x /60 < -mapSize.x / 2)
+        {
+            pos.x = -(mapSize.x / 2) * 60;
+        }
     }
     if (Input::IskeyPressed(GLFW_KEY_D))
     {
         pos.x += 10.0f * playerSpeed * deltaTime;
+        if (pos.x / 60 > mapSize.x / 2)
+        {
+            pos.x = (mapSize.x / 2) * 60;
+        }
     }
     if (Input::IskeyPressed(GLFW_KEY_W))
     {

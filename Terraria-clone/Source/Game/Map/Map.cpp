@@ -1,154 +1,116 @@
 #include "trpch.h"
 #include "Map.h"
 
-Map::Map(int width, int height)
-	:MapWidth(width), MapHeight(height)
+const int CHUNK_SIZE = 16;
+const int TILE_SIZE = 30;
+
+Map::Map(MapSize size)
 {
-	std::vector<float> vertices;
-	std::vector<unsigned int> indices;
-	GenertateTerrain(MapWidth, MapHeight, mapMatrix);
-	generate(vertices, indices);
+	int NumOfChunksX = 10;
+	int NumOfChunksY = 10;
+	mapWidth = NumOfChunksX * CHUNK_SIZE * TILE_SIZE;
+	mapHeight = NumOfChunksY * CHUNK_SIZE * TILE_SIZE;
+	//switch (size)
+	//{
+	//case SMALL:
+	//	//4400 × 1200 (TILES)
+	//	mapWidth = 4400;
+	//	mapHeight = 1200;
+	//	NumOfChunksX = 275;
+	//	NumOfChunksY = 75;
+	//	break;
+	//case NORMAL:
+	//	//6400 × 2000 (TILES)
+	//	mapWidth = 6400;
+	//	mapHeight = 2000;
+	//	NumOfChunksX = 400;
+	//	NumOfChunksY = 125;
+	//	break;
+	//case LARGE:
+	//	//8400 × 2400 (TILES)
+	//	mapWidth = 8400;
+	//	mapHeight = 2400;
+	//	NumOfChunksX = 525;
+	//	NumOfChunksY = 150;
+	//	break;
+	//}
 
-	LOG_INFO("Map generated");
-	LOG_INFO("MAP SIZE: {0}, {1}", GetMapSize().x, GetMapSize().y);
+	m_position = { 0.0,0.0,0.0 };
+	//m_position = { -mapWidth / 2, mapHeight / 4,0.0 };
 
-	m_VA.reset(new VertexArray());
-	m_VA->bind();
-
-	std::shared_ptr<VertexBuffer> VB;
-	VB.reset(new VertexBuffer(vertices.data(), vertices.size() * sizeof(float)));
-	m_VA->setVertexBuffer(VB);
-
-	std::shared_ptr<IndexBuffer>  IB;
-	IB.reset(new IndexBuffer(indices.data(), indices.size()));
-	m_VA->setIndexBuffer(IB);
-
-	m_VA->unbind();
+	m_Chunks.resize(NumOfChunksX);
+	for (int x = 0; x < NumOfChunksX; x++)
+	{
+		for (int y = 0; y < NumOfChunksY; y++)
+		{
+			m_Chunks[x].push_back(Chunk(glm::vec3(
+				(x * 30 * 16) + m_position.x,
+				-(y * 30 * 16) + m_position.y,
+				0.0))
+			);
+		}
+	}
 }
 
 void Map::render(const std::shared_ptr<Shader>& shader)
 {
-	shader->use();
 	Textures::blocksTexture.bind();
 
-	shader->setInt("u_Texture", 0);
-	shader->setMat4("u_Model", glm::mat4(1.0f));
-	
-	m_VA->bind();
-	glDrawElements(GL_TRIANGLES, m_VA->getIndexBuffer()->GetCount(), GL_UNSIGNED_INT, 0);
-	Textures::blocksTexture.unbind(); 
-}
-
-int Map::getHeightBasedOnX(int xPos) const
-{
-	//FUNCTION SET PLAYER POS AT THE BEGINING ABOVE GROUND
-	int count = 0;
-	for (int i = 0; i < GetMapSize().y; i++)
+	for (int x = 0; x < m_Chunks.size(); x++)
 	{
-		char a = GetMapMatrix()[count][xPos];
-		if (a == 'A')
-			count++;
-		else
-			break;
-	}
-	return ((MapHeight - count) - ((MapHeight / 2) + MapHeight / 6)); //I DONT KNOW WHAT IS GOING ON BUT WORKS
-}
-
-void Map::EraseBlockAtPos(int width, int height)
-{
-	int column = width + MapWidth / 2;
-	int row = (MapHeight / 2 - MapHeight / 6) - height;
-	char beforeTile;
-
-	if (column >= 0 && column < MapWidth && row >= 0 && row < MapHeight)
-	{
-		if (mapMatrix[row][column] != 'A')
+		for (int y = 0; y < m_Chunks[x].size(); y++)
 		{
-			beforeTile = mapMatrix[row][column];
-			mapMatrix[row][column] = 'A';
-			ReloadAllMap();
+			m_Chunks[x][y].render(shader);
 		}
 	}
+
+	Textures::blocksTexture.unbind();
 }
 
-void Map::PlaceBlockAtPos(int width, int height, char blockType)
+void Map::setBlockAtPosition(int BlockX, int BlockY, char BlockChar)
 {
-	int column = width + MapWidth / 2;
-	int row = (MapHeight / 2 - MapHeight / 6) - height;
-	char beforeTile;
+	int chunkIndexX = 0;
+	int chunkIndexY = 0;
 
-	if (column >= 0 && column < MapWidth && row >= 0 && row < MapHeight)
+	chunkIndexX = floor(BlockX / CHUNK_SIZE);
+	chunkIndexY = floor(BlockY / CHUNK_SIZE);
+
+	Chunk& chunk = m_Chunks[chunkIndexX][chunkIndexY];
+
+	int localX = 0;
+	int localY = 0;
+
+	int x = BlockX / CHUNK_SIZE; x;
+	int y = BlockY / CHUNK_SIZE; y;
+	localX = BlockX - CHUNK_SIZE * x;
+	localY = BlockY - CHUNK_SIZE * y;
+
+	if (localX >= 0 && localX < CHUNK_SIZE && localY >= 0 && localY < CHUNK_SIZE)
 	{
-		if (mapMatrix[row][column] != blockType)
-		{
-			beforeTile = mapMatrix[row][column];
-			mapMatrix[row][column] = blockType;
-			ReloadAllMap();
-		}
+		//LOG_WARN("Setting local ({0}, {1}) in chunk ({2}, {3}) with {4}", localX, localY, chunkIndexX, chunkIndexY, BlockChar);
+		chunk.SetBlockAtPositionInsideChunk(localX, localY, BlockChar);
+		chunk.ReloadAllChunk();
 	}
 }
 
-void Map::ReloadAllMap()
+char Map::getBlockAtPosition(int BlockX, int BlockY)
 {
-	std::vector<float> vertices;
-	std::vector<unsigned int> indices;
-	generate(vertices, indices);
+	int chunkIndexX = 0;
+	int chunkIndexY = 0;
 
-	m_VA = std::make_shared<VertexArray>();
-	m_VA->bind();
-	
-	std::shared_ptr<VertexBuffer> VB = std::make_shared<VertexBuffer>(vertices.data(), vertices.size() * sizeof(float));
-	m_VA->setVertexBuffer(VB);
-	
-	std::shared_ptr<IndexBuffer> IB = std::make_shared<IndexBuffer>(indices.data(), indices.size());
-	m_VA->setIndexBuffer(IB);
-	
-	m_VA->unbind();
-}
+	chunkIndexX = floor(BlockX / CHUNK_SIZE);
+	chunkIndexY = floor(BlockY / CHUNK_SIZE);
 
-void Map::generate(std::vector<float>& vertices, std::vector<unsigned int>& indices)
-{
-	vertices.clear();
-	vertices.reserve(MapWidth * MapHeight * 20); // 20 floats per block
+	Chunk& chunk = m_Chunks[chunkIndexX][chunkIndexY];
 
-	indices.clear();
-	indices.reserve(MapWidth * MapHeight * 6);   // 6 indices per block
+	int localX = 0;
+	int localY = 0;
 
-	unsigned int offset = 0;
+	int x = BlockX / CHUNK_SIZE; x;
+	int y = BlockY / CHUNK_SIZE; y;
+	localX = BlockX - CHUNK_SIZE * x;
+	localY = BlockY - CHUNK_SIZE * y;
 
-	const float BlockSize = 60.0f;
-	float startPosX = -MapWidth/2;
-	float startPosY = (-MapHeight / 2) + MapHeight /6;
-
-	float xpos = 0.0f;
-	float ypos = 0.0f;
-	float z = 0.0f;
-
-
-	for (int y = 0 ; y < mapMatrix.size() ; y++) {
-		for (int x = 0; x < mapMatrix[y].size(); x++) {
-			char tile = mapMatrix[y][x];
-			xpos = (x + startPosX) * BlockSize;
-			ypos = (y + startPosY) * -BlockSize;
-			z = 0.0f;
-
-			if (tile == 'A') continue;
-
-			auto& tex = texCashe[tile];
-
-			vertices.insert(vertices.end(), {
-				xpos              , ypos + BlockSize, z, tex[3].x, tex[3].y,
-				xpos + BlockSize  , ypos + BlockSize, z, tex[0].x, tex[0].y,
-				xpos + BlockSize  , ypos            , z, tex[1].x, tex[1].y,
-				xpos              , ypos            , z, tex[2].x, tex[2].y
-				});
-
-			indices.insert(indices.end(), {
-				offset + 0, offset + 1, offset + 2,
-				offset + 2, offset + 3, offset + 0
-				});
-
-			offset += 4;
-		}
-	}
+	char blockChar = chunk.GetBlockAtPositionInsideChunk(localX, localY);
+	return blockChar;
 }

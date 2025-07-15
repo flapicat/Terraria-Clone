@@ -1386,6 +1386,7 @@
     <ClInclude Include="vendor\stb\stb_image.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\Map\Chunk.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\App\App.cpp">
@@ -1451,6 +1452,7 @@
     <ClCompile Include="Source\trpch.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Game\Map\Chunk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Textures\Thumbs.db">

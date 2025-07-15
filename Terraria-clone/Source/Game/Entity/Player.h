@@ -19,7 +19,7 @@ public:
     int GetPlayerHeight() const { return playerHeight; };
     glm::vec2 GetMouseWorldPos(const glm::mat4& viewProj, float width, float height);
     glm::vec2 GetMousePosBasedOnBlocks(const glm::mat4& viewProj, float width, float height);
-	void input();
+	void input(glm::vec2 mapSize);
 private:
     int playerHeight = 2;
     float playerSpeed = 100; 

@@ -105,6 +105,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Game\Map\Chunk.h" />
     <ClInclude Include="Source\App\App.h" />
     <ClInclude Include="Source\App\Assets.h" />
     <ClInclude Include="Source\App\DeltaTime.h" />
@@ -549,6 +550,7 @@
     <ClInclude Include="vendor\stb\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Game\Map\Chunk.cpp" />
     <ClCompile Include="Source\App\App.cpp" />
     <ClCompile Include="Source\App\Assets.cpp" />
     <ClCompile Include="Source\App\DeltaTime.cpp" />

@@ -5,7 +5,7 @@
 #include "DeltaTime.h"
 
 Game::Game()
-    :m_camera(-1600, 1600, -900, 900), m_map(100,100)
+    :m_camera(-1600, 1600, -900, 900), m_map(MapSize::SMALL)
 {
     LoadAssets();
     m_camera.SetPosition(glm::vec3(0.0f,0.0f,0.0f));
@@ -13,7 +13,7 @@ Game::Game()
 
     m_TextureShader = std::make_shared<Shader>("assets/shaders/TextureShader.vert", "assets/shaders/TextureShader.frag");
 
-    m_player.SetPlayerPositionBasedOnBlocks(glm::vec3(0, m_map.getHeightBasedOnX(0) + m_player.GetPlayerHeight(), 0));
+    //m_player.SetPlayerPositionBasedOnBlocks(glm::vec3(0, m_map.getHeightBasedOnX(0) + m_player.GetPlayerHeight(), 0));
 
     imguiAPI = new ImGuiAPI();
 }
@@ -72,11 +72,11 @@ void Game::handleInput()
     }
     if (Input::IsMouseButtonPressed(GLFW_MOUSE_BUTTON_1))
     {
-        m_map.EraseBlockAtPos(CursorPos.x, CursorPos.y);
+        //m_map.EraseBlockAtPos(CursorPos.x, CursorPos.y);
     }
     if (Input::IsMouseButtonPressed(GLFW_MOUSE_BUTTON_2))
     {
-        m_map.PlaceBlockAtPos(CursorPos.x, CursorPos.y, currentBlock);
+        m_map.setBlockAtPosition(CursorPos.x, -CursorPos.y, currentBlock);
     }
 
     if (Input::OnScrollUp())
@@ -87,6 +87,9 @@ void Game::handleInput()
     {
         BlockIterator == 0 ? BlockIterator = blocksCharacterType.size() - 1 : BlockIterator--;
     }
+
+    //glm::vec2 mapSize = glm::vec2(m_map.GetMapSize().x, m_map.GetMapSize().y);
+    m_player.input(glm::vec2(100000, 100000));
 
     currentBlock = blocksCharacterType[BlockIterator];
 }
