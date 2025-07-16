@@ -24,7 +24,7 @@ Map::Map(MapSize size)
 	//	mapWidth = 6400;
 	//	mapHeight = 2000;
 	//	NumOfChunksX = 400;
-	//	NumOfChunksY = 125;
+	//	NumOfChunksY = 125;;
 	//	break;
 	//case LARGE:
 	//	//8400 × 2400 (TILES)
