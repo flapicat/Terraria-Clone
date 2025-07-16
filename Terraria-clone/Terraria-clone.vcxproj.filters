@@ -114,13 +114,13 @@
     <ClInclude Include="Source\Game\Map\Blocks.h">
       <Filter>Source\Game\Map</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\Map\Chunk.h">
+      <Filter>Source\Game\Map</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Game\Map\FastNoiseLite.h">
       <Filter>Source\Game\Map</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Map\Map.h">
-      <Filter>Source\Game\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Game\Map\NoiseGeneration.h">
       <Filter>Source\Game\Map</Filter>
     </ClInclude>
     <ClInclude Include="Source\ImGui\ImGuiAPI.h">
@@ -1386,7 +1386,6 @@
     <ClInclude Include="vendor\stb\stb_image.h">
       <Filter>vendor\stb</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Map\Chunk.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\App\App.cpp">
@@ -1440,10 +1439,10 @@
     <ClCompile Include="Source\Game\Map\Block.cpp">
       <Filter>Source\Game\Map</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Map\Map.cpp">
+    <ClCompile Include="Source\Game\Map\Chunk.cpp">
       <Filter>Source\Game\Map</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Map\NoiseGeneration.cpp">
+    <ClCompile Include="Source\Game\Map\Map.cpp">
       <Filter>Source\Game\Map</Filter>
     </ClCompile>
     <ClCompile Include="Source\ImGui\ImGuiAPI.cpp">
@@ -1452,7 +1451,6 @@
     <ClCompile Include="Source\trpch.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Game\Map\Chunk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\Textures\Thumbs.db">

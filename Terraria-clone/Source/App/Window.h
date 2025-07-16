@@ -12,13 +12,12 @@ public:
 		std::string name;
 	};
 	Window(WindowData& data);
-	~Window();
+	virtual ~Window();
 	void update();
 	void CreateOpenGLWindow(WindowData& data);
 	void Destroy();
 
-	inline GLFWwindow* GetWindowPointer() { return m_window; };
-	inline void* GetNativeWindow() { return m_window; };
+	inline GLFWwindow* GetNativeWindow() const { return m_window; };
 
 	inline int GetWidth() { return m_Windata.width; }
 	inline int GetHeight() { return m_Windata.height; }

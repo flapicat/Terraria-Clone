@@ -16,6 +16,7 @@ Game::Game()
     //m_player.SetPlayerPositionBasedOnBlocks(glm::vec3(0, m_map.getHeightBasedOnX(0) + m_player.GetPlayerHeight(), 0));
 
     imguiAPI = new ImGuiAPI();
+    imguiAPI->Create();
 }
 
 Game::~Game()
@@ -45,9 +46,9 @@ void Game::render()
     glm::vec3 playerPos = m_player.GetPlayerPositionBasedOnBlocks();
     imguiAPI->Begin();
     ImGui::Begin("Test Window");
-    ImGui::Text("FPS: %.1f", 1.0f / DeltaTime::getDeltaTime());
-    ImGui::Text("Player pos: (%.1f, %.1f, %.1f)", playerPos.x, playerPos.y, playerPos.z);
-    ImGui::Text("Cursor pos: (%.1f, %.1f)", CursorPos.x, CursorPos.y);
+    ImGui::Text("FPS: %.0f", 1.0f / DeltaTime::getDeltaTime());
+    ImGui::Text("Player pos: (%.0f, %.0f, %.0f)", playerPos.x, playerPos.y, playerPos.z);
+    ImGui::Text("Cursor pos: (%.0f, %.0f)", CursorPos.x, CursorPos.y);
     ImGui::Text("Current Block: %s", charToBlockName(currentBlock).c_str());
     ImGui::End();
     imguiAPI->End();
@@ -72,7 +73,7 @@ void Game::handleInput()
     }
     if (Input::IsMouseButtonPressed(GLFW_MOUSE_BUTTON_1))
     {
-        //m_map.EraseBlockAtPos(CursorPos.x, CursorPos.y);
+        m_map.EraseBlockAtPosition(CursorPos.x, -CursorPos.y);
     }
     if (Input::IsMouseButtonPressed(GLFW_MOUSE_BUTTON_2))
     {

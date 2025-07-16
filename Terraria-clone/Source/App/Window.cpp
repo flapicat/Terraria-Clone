@@ -102,4 +102,3 @@ void Window::Destroy()
 {
 	glfwDestroyWindow(m_window);
 }
-

@@ -5,7 +5,6 @@
 
 ImGuiAPI::ImGuiAPI()
 {
-    Create();
 }
 
 ImGuiAPI::~ImGuiAPI()

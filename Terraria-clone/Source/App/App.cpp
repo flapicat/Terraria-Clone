@@ -8,7 +8,7 @@ App* App::s_Instance = nullptr;
 App::App()
 {
     s_Instance = this;
-    Window::WindowData data{ 1600, 900, "Terraria" };
+    Window::WindowData data{ 1920, 1080, "Terraria" };
     m_window = std::make_unique<Window>(data);
     LOG_INFO("Window created width: {0}, height: {1}, title: {2}", data.width, data.height, data.name);
 
@@ -26,7 +26,7 @@ void App::Run()
 
         //UPDATE
         DeltaTime::updateDeltaTime();
-        if (glfwWindowShouldClose(m_window->GetWindowPointer()))
+        if (glfwWindowShouldClose(m_window->GetNativeWindow()))
         {
             running = false;
         }

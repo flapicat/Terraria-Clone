@@ -3,23 +3,17 @@
 
 inline std::unordered_map<char, std::vector<glm::vec2>> texCashe =
 {
+	{ 'A', Blocks[AIR].GetTexCoords()    },
 	{ 'G', Blocks[GRASS1].GetTexCoords() },
 	{ 'S', Blocks[STONE1].GetTexCoords() },
-	{ 'X', Blocks[DIRT1].GetTexCoords() },
-	{ 'W', Blocks[SAND1].GetTexCoords() },
+	{ 'X', Blocks[DIRT1].GetTexCoords()  },
+	{ 'W', Blocks[SAND1].GetTexCoords()  },
 };
 
 Chunk::Chunk(glm::vec3 position)
 {
-	//TEMP
-	mapMatrix.resize(chunkHeight, std::string(chunkWidth, 'A'));
-	for (int y = 0; y < mapMatrix.size(); y++) {
-		for (int x = 0; x < mapMatrix[y].size(); x++) {
-			char& tile = mapMatrix[chunkHeight - y - 1][x];
-			tile = 'X';
-		}
-	}
-	//
+	ChunkMatrix.resize(chunkHeight, std::string(chunkWidth, 'A'));
+
 	m_position = position;
 	std::vector<float> vertices;
 	std::vector<unsigned int> indices;
@@ -56,7 +50,7 @@ void Chunk::SetBlockAtPositionInsideChunk(int x, int y, char blockChar)
 {
 	if (x >= 0 && x < chunkWidth && y >= 0 && y < chunkHeight)
 	{
-		mapMatrix[y][x] = blockChar;
+		ChunkMatrix[y][x] = blockChar;
 		ReloadAllChunk();
 	}
 }
@@ -65,7 +59,7 @@ char Chunk::GetBlockAtPositionInsideChunk(int x, int y)
 {
 	if (x >= 0 && x < chunkWidth && y >= 0 && y < chunkHeight)
 	{
-		return mapMatrix[y][x];
+		return ChunkMatrix[y][x];
 	}
 	return 'e';
 }
@@ -91,7 +85,6 @@ void Chunk::ReloadAllChunk()
 
 void Chunk::generate(std::vector<float>& vertices, std::vector<unsigned int>& indices)
 {
-
 	vertices.clear();
 	vertices.reserve(chunkWidth * chunkHeight * 20); // 20 floats per block
 
@@ -107,14 +100,14 @@ void Chunk::generate(std::vector<float>& vertices, std::vector<unsigned int>& in
 	float z = 0.0f;
 
 
-	for (int y = 0; y < mapMatrix.size(); y++) {
-		for (int x = 0; x < mapMatrix[y].size(); x++) {
-			char tile = mapMatrix[y][x];
+	for (int y = 0; y < ChunkMatrix.size(); y++) {
+		for (int x = 0; x < ChunkMatrix[y].size(); x++) {
+			char tile = ChunkMatrix[y][x];
 			xpos = m_position.x + x * BlockSize;
 			ypos = m_position.y + y * -BlockSize;
 			z = 0.0f;
 
-			if (tile == 'A') continue;
+			//if (tile == 'A') continue;
 
 			auto& tex = texCashe[tile];
 
