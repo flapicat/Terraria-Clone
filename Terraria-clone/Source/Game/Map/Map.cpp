@@ -4,40 +4,34 @@
 #include "FastNoiseLite.h"
 
 const int CHUNK_SIZE = 16;
-const int TILE_SIZE = 30;
+const int TILE_SIZE = 60;
 
 Map::Map(MapSize size)
 {
 	int NumOfChunksX = 10;
 	int NumOfChunksY = 10;
-	mapWidth = NumOfChunksX * CHUNK_SIZE * TILE_SIZE;
-	mapHeight = NumOfChunksY * CHUNK_SIZE * TILE_SIZE;
-	mapWidthInTiles = NumOfChunksX * CHUNK_SIZE;
-	mapHeightInTiles = NumOfChunksY * CHUNK_SIZE;
 	//switch (size)
 	//{
 	//case SMALL:
 	//	//4400 × 1200 (TILES)
-	//	mapWidth = 4400;
-	//	mapHeight = 1200;
 	//	NumOfChunksX = 275;
 	//	NumOfChunksY = 75;
 	//	break;
 	//case NORMAL:
 	//	//6400 × 2000 (TILES)
-	//	mapWidth = 6400;
-	//	mapHeight = 2000;
 	//	NumOfChunksX = 400;
 	//	NumOfChunksY = 125;
 	//	break;
 	//case LARGE:
 	//	//8400 × 2400 (TILES)
-	//	mapWidth = 8400;
-	//	mapHeight = 2400;
 	//	NumOfChunksX = 525;
 	//	NumOfChunksY = 150;
 	//	break;
 	//}
+	mapWidthInWorldSpace = NumOfChunksX * CHUNK_SIZE * TILE_SIZE;
+	mapHeightInWorldSpace = NumOfChunksY * CHUNK_SIZE * TILE_SIZE;
+	mapWidthInTiles = NumOfChunksX * CHUNK_SIZE;
+	mapHeightInTiles = NumOfChunksY * CHUNK_SIZE;
 
 	m_position = { 0.0,0.0,0.0 };
 
@@ -56,19 +50,45 @@ Map::Map(MapSize size)
 	generateMap(mapWidthInTiles, mapHeightInTiles);
 }
 
-void Map::render(const std::shared_ptr<Shader>& shader)
+void Map::render(const std::shared_ptr<Shader>& shader, glm::vec3 cameraPos, glm::vec2 viewportSize)
 {
-	Textures::blocksTexture.bind();
+	//LOG_WARN("cameraPOS: {0},{1}", cameraPos.x, cameraPos.y);
+	const int marginX = 2;
+	const int marginY = 1;
 
-	for (int x = 0; x < m_Chunks.size(); x++)
+	int chunkWorldSize = CHUNK_SIZE * TILE_SIZE;
+	int chunkCountX = m_Chunks.size();
+	int chunkCountY = m_Chunks[0].size();
+
+	int startX = std::max(0, (int)std::floor(cameraPos.x / chunkWorldSize) - marginX);
+	int endX = std::min(chunkCountX, (int)std::floor((cameraPos.x + viewportSize.x) / chunkWorldSize) + marginX);
+
+	int startY = std::max(0, (int)std::floor(-cameraPos.y / chunkWorldSize) - marginY);
+	int endY = std::min(chunkCountY, (int)std::floor((-cameraPos.y + viewportSize.y) / chunkWorldSize) + marginY);
+	
+	//LOG_WARN("X:{0};{1} Y:{2};{3} ", startX, endX, startY, endY);
+
+	int ChunkRendered = 0;
+	Textures::blocksTexture.bind();
+	for (int x = startX; x < endX; x++)
 	{
-		for (int y = 0; y < m_Chunks[x].size(); y++)
+		for (int y = startY; y < endY; y++)
 		{
 			m_Chunks[x][y].render(shader);
+			ChunkRendered++;
 		}
 	}
-
+	//LOG_WARN("{0}", ChunkRendered);
 	Textures::blocksTexture.unbind();
+}
+
+void Map::setBlockAtPositionUnSafe(int BlockX, int BlockY, char BlockChar)
+{
+	int chunkX = BlockX / CHUNK_SIZE;
+	int chunkY = BlockY / CHUNK_SIZE;
+	int localX = BlockX % CHUNK_SIZE;
+	int localY = BlockY % CHUNK_SIZE;
+	m_Chunks[chunkX][chunkY].SetBlockAtPositionInsideChunk(localX, localY, BlockChar);
 }
 
 void Map::setBlockAtPosition(int BlockX, int BlockY, char BlockChar)
@@ -167,6 +187,7 @@ char Map::getBlockAtPosition(int BlockX, int BlockY)
 
 void Map::generateMap(int width, int height)
 {
+	LOG_WARN("{0}; {1}", width, height);
 	//TERRAIN
 	int horizontLevel = height * 0.7;
 	int randomSeed = rand();
@@ -196,6 +217,7 @@ void Map::generateMap(int width, int height)
 				else {
 					setBlockAtPositionWithoutReloading(x, flippedY, 'S'); // Stone
 				}
+				LOG_WARN("{0}; {1}", x, y);
 			}
 		}
 	}

@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+#include <glm/glm.hpp>
+
 class Window
 {
 public:
@@ -21,6 +23,7 @@ public:
 
 	inline int GetWidth() { return m_Windata.width; }
 	inline int GetHeight() { return m_Windata.height; }
+	inline glm::vec2 GetSize() { return { m_Windata.width, m_Windata.height }; }
 
 	static inline bool GetScrollUp() { return m_ScrollUp; }
 	static inline bool GetScrollDown() { return m_ScrollDown; }

@@ -5,7 +5,7 @@
 #include "DeltaTime.h"
 
 Game::Game()
-    :m_camera(-1600, 1600, -900, 900), m_map(MapSize::SMALL)
+    :m_camera(-1920, 1920, -1080, 1080), m_map(MapSize::SMALL)
 {
     LoadAssets();
     m_camera.SetPosition(glm::vec3(0.0f,0.0f,0.0f));
@@ -38,7 +38,7 @@ void Game::render()
 {
     m_TextureShader->use();
     m_TextureShader->setMat4("u_ViewProjection", m_camera.GetViewProjectionMatrix());
-    m_map.render(m_TextureShader);
+    m_map.render(m_TextureShader, m_camera.GetPosition(), glm::vec2(3840, 2160));
     m_player.render(m_TextureShader);
 
     //IMGUI
