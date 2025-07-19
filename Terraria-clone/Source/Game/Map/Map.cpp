@@ -8,77 +8,96 @@ const int TILE_SIZE = 60;
 
 Map::Map(MapSize size)
 {
-	int NumOfChunksX = 10;
-	int NumOfChunksY = 10;
-	//switch (size)
-	//{
-	//case SMALL:
-	//	//4400 × 1200 (TILES)
-	//	NumOfChunksX = 275;
-	//	NumOfChunksY = 75;
-	//	break;
-	//case NORMAL:
-	//	//6400 × 2000 (TILES)
-	//	NumOfChunksX = 400;
-	//	NumOfChunksY = 125;
-	//	break;
-	//case LARGE:
-	//	//8400 × 2400 (TILES)
-	//	NumOfChunksX = 525;
-	//	NumOfChunksY = 150;
-	//	break;
-	//}
-	mapWidthInWorldSpace = NumOfChunksX * CHUNK_SIZE * TILE_SIZE;
-	mapHeightInWorldSpace = NumOfChunksY * CHUNK_SIZE * TILE_SIZE;
-	mapWidthInTiles = NumOfChunksX * CHUNK_SIZE;
-	mapHeightInTiles = NumOfChunksY * CHUNK_SIZE;
+	m_NumOfChunksX = 10;
+	m_NumOfChunksY = 10;
+	switch (size)
+	{
+	case SMALL:
+		//4400 × 1200 (TILES)
+		m_NumOfChunksX = 275;
+		m_NumOfChunksY = 75;
+		break;
+	case NORMAL:
+		//6400 × 2000 (TILES)
+		m_NumOfChunksX = 400;
+		m_NumOfChunksY = 125;
+		break;
+	case LARGE:
+		//8400 × 2400 (TILES)
+		m_NumOfChunksX = 525;
+		m_NumOfChunksY = 150;
+		break;
+	}
+	mapWidthInWorldSpace = m_NumOfChunksX * CHUNK_SIZE * TILE_SIZE;
+	mapHeightInWorldSpace = m_NumOfChunksY * CHUNK_SIZE * TILE_SIZE;
+	mapWidthInTiles = m_NumOfChunksX * CHUNK_SIZE;
+	mapHeightInTiles = m_NumOfChunksY * CHUNK_SIZE;
 
 	m_position = { 0.0,0.0,0.0 };
 
-	m_Chunks.resize(NumOfChunksX);
-	for (int x = 0; x < NumOfChunksX; x++)
+	m_Chunks.resize(m_NumOfChunksX);
+	for (int x = 0; x < m_NumOfChunksX; x++)
 	{
-		for (int y = 0; y < NumOfChunksY; y++)
+		m_Chunks[x].resize(m_NumOfChunksY);
+		for (int y = 0; y < m_NumOfChunksY; y++)
 		{
-			m_Chunks[x].push_back(Chunk(glm::vec3(
-				(x * 30 * 16) + m_position.x,
-				-(y * 30 * 16) + m_position.y,
-				0.0))
+			m_Chunks[x][y] = std::make_unique<Chunk>(glm::vec3(
+				(x * TILE_SIZE/2 * CHUNK_SIZE) + m_position.x,
+				-(y * TILE_SIZE/2 * CHUNK_SIZE) + m_position.y,
+				0.0)
 			);
 		}
 	}
-	generateMap(mapWidthInTiles, mapHeightInTiles);
+	m_GenerationThreadRunning = true;
+	m_GenerationThread = std::thread(&Map::generationThreadLoop, this);
 }
 
-void Map::render(const std::shared_ptr<Shader>& shader, glm::vec3 cameraPos, glm::vec2 viewportSize)
+Map::~Map()
 {
-	//LOG_WARN("cameraPOS: {0},{1}", cameraPos.x, cameraPos.y);
-	const int marginX = 2;
-	const int marginY = 1;
-
-	int chunkWorldSize = CHUNK_SIZE * TILE_SIZE;
-	int chunkCountX = m_Chunks.size();
-	int chunkCountY = m_Chunks[0].size();
-
-	int startX = std::max(0, (int)std::floor(cameraPos.x / chunkWorldSize) - marginX);
-	int endX = std::min(chunkCountX, (int)std::floor((cameraPos.x + viewportSize.x) / chunkWorldSize) + marginX);
-
-	int startY = std::max(0, (int)std::floor(-cameraPos.y / chunkWorldSize) - marginY);
-	int endY = std::min(chunkCountY, (int)std::floor((-cameraPos.y + viewportSize.y) / chunkWorldSize) + marginY);
-	
-	//LOG_WARN("X:{0};{1} Y:{2};{3} ", startX, endX, startY, endY);
-
-	int ChunkRendered = 0;
-	Textures::blocksTexture.bind();
-	for (int x = startX; x < endX; x++)
 	{
-		for (int y = startY; y < endY; y++)
-		{
-			m_Chunks[x][y].render(shader);
-			ChunkRendered++;
+		std::lock_guard<std::mutex> lock(m_QueueMutex);
+		m_GenerationThreadRunning = false;
+	}
+	m_QueueCV.notify_one();
+	if (m_GenerationThread.joinable())
+		m_GenerationThread.join();
+}
+
+void Map::update(glm::vec3 camPos, glm::vec2 viewport)
+{
+	if (camPos != m_cameraPos)
+	{
+		m_cameraPos = camPos;
+		m_viewport = viewport;
+		for (int x = 0; x < m_Chunks.size(); x++) {
+			for (int y = 0; y < m_Chunks[x].size(); y++) {
+				if (isChunkInCameraView(x, y, m_cameraPos, m_viewport, 2, 2))
+				{
+					Chunk& chunk = *m_Chunks[x][y];
+					if (!chunk.getIsChunkGenerated()) {
+						requestChunkGeneration(x, y);
+					}
+				}
+			}
 		}
 	}
-	//LOG_WARN("{0}", ChunkRendered);
+}
+
+void Map::render(const std::shared_ptr<Shader>& shader)
+{
+	int ChunkRendered = 0;
+	Textures::blocksTexture.bind();
+
+	for (int x = 0; x < m_Chunks.size(); x++) {
+		for (int y = 0; y < m_Chunks[x].size(); y++) {
+			if (isChunkInCameraView(x, y, m_cameraPos, m_viewport, 2,2)) 
+			{
+				Chunk& chunk = *m_Chunks[x][y];
+				chunk.render(shader);
+				ChunkRendered++;
+			}
+		}
+	}
 	Textures::blocksTexture.unbind();
 }
 
@@ -88,7 +107,7 @@ void Map::setBlockAtPositionUnSafe(int BlockX, int BlockY, char BlockChar)
 	int chunkY = BlockY / CHUNK_SIZE;
 	int localX = BlockX % CHUNK_SIZE;
 	int localY = BlockY % CHUNK_SIZE;
-	m_Chunks[chunkX][chunkY].SetBlockAtPositionInsideChunk(localX, localY, BlockChar);
+	m_Chunks[chunkX][chunkY]->SetBlockAtPositionInsideChunk(localX, localY, BlockChar);
 }
 
 void Map::setBlockAtPosition(int BlockX, int BlockY, char BlockChar)
@@ -101,15 +120,15 @@ void Map::setBlockAtPosition(int BlockX, int BlockY, char BlockChar)
 		chunkIndexX = floor(BlockX / CHUNK_SIZE);
 		chunkIndexY = floor(BlockY / CHUNK_SIZE);
 
-		if (chunkIndexX >= 0 && chunkIndexX < m_Chunks[0].size() && chunkIndexY >= 0 && chunkIndexY < m_Chunks.size())
+		if (chunkIndexX >= 0 && chunkIndexX < m_Chunks.size() && chunkIndexY >= 0 && chunkIndexY < m_Chunks[0].size())
 		{
-			Chunk& chunk = m_Chunks[chunkIndexX][chunkIndexY];
+			Chunk& chunk = *m_Chunks[chunkIndexX][chunkIndexY];
 
 			int localX = 0;
 			int localY = 0;
 
-			int x = BlockX / CHUNK_SIZE; x;
-			int y = BlockY / CHUNK_SIZE; y;
+			int x = BlockX / CHUNK_SIZE;
+			int y = BlockY / CHUNK_SIZE;
 			localX = BlockX - CHUNK_SIZE * x;
 			localY = BlockY - CHUNK_SIZE * y;
 
@@ -131,9 +150,9 @@ void Map::setBlockAtPositionWithoutReloading(int BlockX, int BlockY, char BlockC
 	chunkIndexX = floor(BlockX / CHUNK_SIZE);
 	chunkIndexY = floor(BlockY / CHUNK_SIZE);
 
-	if (chunkIndexX >= 0 && chunkIndexX < m_Chunks[0].size() && chunkIndexY >= 0 && chunkIndexY < m_Chunks.size())
+	if (chunkIndexX >= 0 && chunkIndexX < m_Chunks.size() && chunkIndexY >= 0 && chunkIndexY < m_Chunks[0].size())
 	{
-		Chunk& chunk = m_Chunks[chunkIndexX][chunkIndexY];
+		Chunk& chunk = *m_Chunks[chunkIndexX][chunkIndexY];
 
 		int localX = 0;
 		int localY = 0;
@@ -156,6 +175,40 @@ void Map::EraseBlockAtPosition(int x, int y)
 	setBlockAtPosition(x, y, 'A');
 }
 
+bool Map::isChunkInCameraView(int chunkX, int chunkY, glm::vec3 cameraPos, glm::vec2 viewportSize, int marginx, int marginy)
+{
+	const int marginX = marginx;
+	const int marginY = marginy;
+
+	int chunkWorldSize = CHUNK_SIZE * TILE_SIZE;
+
+	int camChunkX = (int)std::floor(cameraPos.x / chunkWorldSize);
+	int camChunkY = (int)std::floor(-cameraPos.y / chunkWorldSize);
+
+	int viewChunksX = (int)std::ceil(viewportSize.x / chunkWorldSize);
+	int viewChunksY = (int)std::ceil(viewportSize.y / chunkWorldSize);
+
+	int startX = std::max(0, camChunkX - (viewChunksX / 2) - marginX);
+	int endX = std::min((int)m_Chunks.size(), camChunkX + (viewChunksX / 2) + marginX);
+
+	int startY = std::max(0, camChunkY - (viewChunksY / 2) - marginY);
+	int endY = std::min((int)m_Chunks[0].size(), camChunkY + (viewChunksY / 2) + marginY);
+
+	return (chunkX >= startX && chunkX < endX &&
+		chunkY >= startY && chunkY < endY);
+}
+
+void Map::reloadAllMap()
+{
+	for (size_t	 x = 0; x < m_Chunks.size(); x++)
+	{
+		for (size_t y = 0; y < m_Chunks[x].size(); y++)
+		{
+			m_Chunks[x][y]->ReloadAllChunk();
+		}
+	}
+}
+
 char Map::getBlockAtPosition(int BlockX, int BlockY)
 {
 	int chunkIndexX = 0;
@@ -164,9 +217,9 @@ char Map::getBlockAtPosition(int BlockX, int BlockY)
 	chunkIndexX = floor(BlockX / CHUNK_SIZE);
 	chunkIndexY = floor(BlockY / CHUNK_SIZE);
 
-	if (chunkIndexX >= 0 && chunkIndexX < m_Chunks[0].size() && chunkIndexY >= 0 && chunkIndexY < m_Chunks.size())
+	if (chunkIndexX >= 0 && chunkIndexX < m_Chunks.size() && chunkIndexY >= 0 && chunkIndexY < m_Chunks[0].size())
 	{
-		Chunk& chunk = m_Chunks[chunkIndexX][chunkIndexY];
+		Chunk& chunk = *m_Chunks[chunkIndexX][chunkIndexY];
 
 		int localX = 0;
 		int localY = 0;
@@ -182,76 +235,131 @@ char Map::getBlockAtPosition(int BlockX, int BlockY)
 			return blockChar;
 		}
 	}
+	return ' ';
 	LOG_WARN("TRYING TO GET BLOCK OUTSIDE MAP");
 }
 
-void Map::generateMap(int width, int height)
+void Map::generateChunk(int chunkX, int chunkY)
 {
-	LOG_WARN("{0}; {1}", width, height);
-	//TERRAIN
+	int startX = chunkX * CHUNK_SIZE;
+	int startY = chunkY * CHUNK_SIZE;
+	int endX = startX + CHUNK_SIZE;
+	int endY = startY + CHUNK_SIZE;
+
+	int height = mapHeightInTiles;
 	int horizontLevel = height * 0.7;
-	int randomSeed = rand();
+
+	static FastNoiseLite horizontNoise, caveNoise;
+	static bool noiseInitialized = false;
+	if (!noiseInitialized)
 	{
-		FastNoiseLite horizontNoise;
+		int seedHorizont = rand();
+		int seedCaves = rand();
+
 		horizontNoise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
 		horizontNoise.SetFrequency(0.01f);
-		horizontNoise.SetSeed(randomSeed);
+		horizontNoise.SetSeed(seedHorizont);
 
-		int HorizontY = 0;
-
-		for (int x = 0; x < width; ++x) {
-			float noiseValue = horizontNoise.GetNoise((float)x, 0.0f);
-			int variation = static_cast<int>(noiseValue * 7); // Range: [-7, 7]
-			int TerrainLevel = horizontLevel + variation;
-			TerrainLevel = std::clamp(TerrainLevel, 0, height - 1);
-
-			for (int y = 0; y <= TerrainLevel; y++) {  // Invert Y: bottom is mapHeight - 1
-				int flippedY = height - y - 1;
-
-				if (y == TerrainLevel) {
-					setBlockAtPositionWithoutReloading(x, flippedY, 'G'); // Grass
-				}
-				else if (y > TerrainLevel - 5) {
-					setBlockAtPositionWithoutReloading(x, flippedY, 'X'); // Dirt
-				}
-				else {
-					setBlockAtPositionWithoutReloading(x, flippedY, 'S'); // Stone
-				}
-				LOG_WARN("{0}; {1}", x, y);
-			}
-		}
-	}
-
-	//CAVES
-	{
-		randomSeed = rand();
-		FastNoiseLite caveNoise;
 		caveNoise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
 		caveNoise.SetFrequency(0.05f);
-		caveNoise.SetSeed(randomSeed);
+		caveNoise.SetSeed(seedCaves);
 
-		for (int y = 0; y < height; y++)
+		noiseInitialized = true;
+	}
+
+	Chunk& chunk = *m_Chunks[chunkX][chunkY];
+
+	//     TERRAIN GENERATION    
+	for (int x = startX; x < endX; ++x)
+	{
+		float noiseVal = horizontNoise.GetNoise((float)x, 0.0f);
+		int variation = static_cast<int>(noiseVal * 7);
+		int terrainLevel = horizontLevel + variation;
+		terrainLevel = std::clamp(terrainLevel, 0, height - 1);
+
+		for (int y = startY; y < endY; ++y)
 		{
-			for (int x = 0; x < width; x++)
-			{
-				if (getBlockAtPosition(x, y) == 'S' && y > horizontLevel - 50)
-				{
-					float caveValue = caveNoise.GetNoise((float)x, (float)y);
+			int flippedY = height - y - 1;
 
-					if (caveValue > 0.8f) {
-						setBlockAtPositionWithoutReloading(x, y, 'A');
-					}
+			if (y <= terrainLevel)
+			{
+				char block;
+				if (y == terrainLevel) {
+					block = 'G';
 				}
+				else if (y > terrainLevel - 5) {
+					block = 'X';
+				}
+				else {
+					block = 'S';
+				}
+				setBlockAtPositionWithoutReloading(x, flippedY, block);
 			}
 		}
 	}
 
-	//Reloading all chunks
-	for (auto& chunkColumn : m_Chunks)
+	//     CAVE GENERATION    
+	for (int y = startY; y < endY; ++y)
 	{
-		for (auto& chunk : chunkColumn)
+		for (int x = startX; x < endX; ++x)
 		{
-			chunk.ReloadAllChunk();
+			int flippedY = height - y - 1;
+
+			if (getBlockAtPosition(x, flippedY) == 'S' && y < horizontLevel - 20)
+			{
+				float caveVal = caveNoise.GetNoise((float)x, (float)y);
+				if (caveVal > 0.8f)
+				{
+					setBlockAtPositionWithoutReloading(x, flippedY, 'A');
+				}
+			}
 		}
 	}
+}
+
+void Map::generationThreadLoop()
+{
+	while (true) {
+		std::pair<int, int> chunkCoords;
+
+		{
+			std::unique_lock<std::mutex> lock(m_QueueMutex);
+			m_QueueCV.wait(lock, [this]() {
+				return !m_GenerationQueue.empty() || !m_GenerationThreadRunning;
+				});
+
+			if (!m_GenerationThreadRunning) {
+				break;
+			}
+			{
+				chunkCoords = m_GenerationQueue.front(); 
+				m_GenerationQueue.pop();
+				m_PendingChunks.erase(chunkCoords);
+			}
+		}
+
+		int x = chunkCoords.first;
+		int y = m_NumOfChunksY - 1 - chunkCoords.second;
+
+		if (!m_Chunks[x][y]->getIsChunkGenerated()) {
+			generateChunk(x, y);
+			m_Chunks[x][y]->setChunkIsGenerated(true);
+			m_Chunks[x][y]->ReloadAllChunk();
+		}
+	}
+}
+
+void Map::requestChunkGeneration(int x, int y)
+{
+	std::lock_guard<std::mutex> lock(m_QueueMutex);
+
+	if (m_Chunks[x][y]->getIsChunkGenerated())
+		return;
+
+	if (m_PendingChunks.find({ x, y }) != m_PendingChunks.end())
+		return;
+
+	m_GenerationQueue.emplace(x, y);
+	m_PendingChunks.emplace(x, y);
+	m_QueueCV.notify_one();
 }

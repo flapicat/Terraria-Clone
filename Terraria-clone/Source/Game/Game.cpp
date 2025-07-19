@@ -13,6 +13,7 @@ Game::Game()
 
     m_TextureShader = std::make_shared<Shader>("assets/shaders/TextureShader.vert", "assets/shaders/TextureShader.frag");
 
+    m_player.SetPlayerPositionBasedOnBlocks(glm::vec3(1500,-500,0));
     //m_player.SetPlayerPositionBasedOnBlocks(glm::vec3(0, m_map.getHeightBasedOnX(0) + m_player.GetPlayerHeight(), 0));
 
     imguiAPI = new ImGuiAPI();
@@ -29,6 +30,7 @@ void Game::update()
     glm::vec2 CursorPos = m_player.GetMousePosBasedOnBlocks(m_camera.GetViewProjectionMatrix(), App::Get().GetWindow().GetWidth(), App::Get().GetWindow().GetHeight());
 
     handleInput();
+    m_map.update(m_camera.GetPosition(), glm::vec2(3840, 2160));
     m_player.update();
     AttachCameraToPlayer(attachCameraToPlayer); 
     //LOG_WARN("{0},{1},{2}", m_player.GetPlayerPositionBasedOnBlocks().x, m_player.GetPlayerPositionBasedOnBlocks().y, m_player.GetPlayerPositionBasedOnBlocks().z);
@@ -38,7 +40,7 @@ void Game::render()
 {
     m_TextureShader->use();
     m_TextureShader->setMat4("u_ViewProjection", m_camera.GetViewProjectionMatrix());
-    m_map.render(m_TextureShader, m_camera.GetPosition(), glm::vec2(3840, 2160));
+    m_map.render(m_TextureShader);
     m_player.render(m_TextureShader);
 
     //IMGUI
@@ -70,6 +72,10 @@ void Game::handleInput()
     if (Input::OnkeyPressed(GLFW_KEY_C))
     {
         attachCameraToPlayer = !attachCameraToPlayer;
+    }
+    if (Input::OnkeyPressed(GLFW_KEY_R))
+    {
+        m_map.reloadAllMap();
     }
     if (Input::IsMouseButtonPressed(GLFW_MOUSE_BUTTON_1))
     {

@@ -35,8 +35,30 @@ Chunk::Chunk(glm::vec3 position)
 
 void Chunk::render(const std::shared_ptr<Shader>& shader)
 {
-	glm::mat4 m_model = glm::mat4(1.0f);
-	m_model = glm::translate(m_model, m_position);
+	if (m_needsUpload)
+	{
+		std::lock_guard<std::mutex> lock(m_meshMutex);
+		if (!m_pendingVertices.empty() && !m_pendingIndices.empty())
+		{
+			m_VA = std::make_shared<VertexArray>();
+			m_VA->bind();
+
+			auto VB = std::make_shared<VertexBuffer>(m_pendingVertices.data(), m_pendingVertices.size() * sizeof(float));
+			auto IB = std::make_shared<IndexBuffer>(m_pendingIndices.data(), m_pendingIndices.size());
+
+			m_VA->setVertexBuffer(VB);
+			m_VA->setIndexBuffer(IB);
+			m_VA->unbind();
+
+			m_pendingVertices.clear();
+			m_pendingIndices.clear();
+			m_needsUpload = false;
+		}
+	}
+
+	if (!m_VA) return;
+
+	glm::mat4 m_model = glm::translate(glm::mat4(1.0f), m_position);
 
 	shader->use();
 	shader->setInt("u_Texture", 0);
@@ -44,6 +66,7 @@ void Chunk::render(const std::shared_ptr<Shader>& shader)
 
 	m_VA->bind();
 	glDrawElements(GL_TRIANGLES, m_VA->getIndexBuffer()->GetCount(), GL_UNSIGNED_INT, 0);
+	m_VA->unbind();
 }
 
 void Chunk::SetBlockAtPositionInsideChunk(int x, int y, char blockChar)
@@ -71,16 +94,12 @@ void Chunk::ReloadAllChunk()
 	std::vector<unsigned int> indices;
 	generate(vertices, indices);
 
-	m_VA = std::make_shared<VertexArray>();
-	m_VA->bind();
-
-	std::shared_ptr<VertexBuffer> VB = std::make_shared<VertexBuffer>(vertices.data(), vertices.size() * sizeof(float));
-	m_VA->setVertexBuffer(VB);
-
-	std::shared_ptr<IndexBuffer> IB = std::make_shared<IndexBuffer>(indices.data(), indices.size());
-	m_VA->setIndexBuffer(IB);
-
-	m_VA->unbind();
+	{
+		std::lock_guard<std::mutex> lock(m_meshMutex);
+		m_pendingVertices = std::move(vertices);
+		m_pendingIndices = std::move(indices);
+		m_needsUpload = true;
+	}
 }
 
 void Chunk::generate(std::vector<float>& vertices, std::vector<unsigned int>& indices)

@@ -49,6 +49,7 @@ void Player::render(const std::shared_ptr<Shader>& shader)
 
     m_VA->bind();
     glDrawElements(GL_TRIANGLES, m_VA->getIndexBuffer()->GetCount(), GL_UNSIGNED_INT, 0);
+    m_VA->unbind();
 }
 
 void Player::SetPlayerPositionBasedOnBlocks(glm::vec3& position)
