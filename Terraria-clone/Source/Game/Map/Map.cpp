@@ -8,8 +8,8 @@ const int TILE_SIZE = 60;
 
 Map::Map(MapSize size)
 {
-	m_NumOfChunksX = 10;
-	m_NumOfChunksY = 10;
+	m_NumOfChunksX = 20;
+	m_NumOfChunksY = 20;
 	switch (size)
 	{
 	case SMALL:
@@ -42,8 +42,8 @@ Map::Map(MapSize size)
 		for (int y = 0; y < m_NumOfChunksY; y++)
 		{
 			m_Chunks[x][y] = std::make_unique<Chunk>(glm::vec3(
-				(x * TILE_SIZE/2 * CHUNK_SIZE) + m_position.x,
-				-(y * TILE_SIZE/2 * CHUNK_SIZE) + m_position.y,
+				(x * TILE_SIZE / 2 * CHUNK_SIZE) + m_position.x,
+				-(y * TILE_SIZE / 2 * CHUNK_SIZE) + m_position.y,
 				0.0)
 			);
 		}
@@ -73,9 +73,10 @@ void Map::update(glm::vec3 camPos, glm::vec2 viewport)
 			for (int y = 0; y < m_Chunks[x].size(); y++) {
 				if (isChunkInCameraView(x, y, m_cameraPos, m_viewport, 2, 2))
 				{
-					Chunk& chunk = *m_Chunks[x][y];
+					int flippedY = m_Chunks[x].size() - 1 - y;
+					Chunk& chunk = *m_Chunks[x][flippedY];
 					if (!chunk.getIsChunkGenerated()) {
-						requestChunkGeneration(x, y);
+						requestChunkGeneration(x, flippedY);
 					}
 				}
 			}
@@ -89,8 +90,9 @@ void Map::render(const std::shared_ptr<Shader>& shader)
 	Textures::blocksTexture.bind();
 
 	for (int x = 0; x < m_Chunks.size(); x++) {
-		for (int y = 0; y < m_Chunks[x].size(); y++) {
-			if (isChunkInCameraView(x, y, m_cameraPos, m_viewport, 2,2)) 
+		int height = m_Chunks[x].size();
+		for (int y = height - 1; y >= 0; y--) {
+			if (isChunkInCameraView(x, y, m_cameraPos, m_viewport, 2, 2))
 			{
 				Chunk& chunk = *m_Chunks[x][y];
 				chunk.render(shader);
@@ -134,7 +136,6 @@ void Map::setBlockAtPosition(int BlockX, int BlockY, char BlockChar)
 
 			if (localX >= 0 && localX < CHUNK_SIZE && localY >= 0 && localY < CHUNK_SIZE)
 			{
-				//LOG_WARN("Setting local ({0}, {1}) in chunk ({2}, {3}) with {4}", localX, localY, chunkIndexX, chunkIndexY, BlockChar);
 				chunk.SetBlockAtPositionInsideChunk(localX, localY, BlockChar);
 				chunk.ReloadAllChunk();
 			}
@@ -164,7 +165,6 @@ void Map::setBlockAtPositionWithoutReloading(int BlockX, int BlockY, char BlockC
 
 		if (localX >= 0 && localX < CHUNK_SIZE && localY >= 0 && localY < CHUNK_SIZE)
 		{
-			//LOG_WARN("Setting local ({0}, {1}) in chunk ({2}, {3}) with {4}", localX, localY, chunkIndexX, chunkIndexY, BlockChar);
 			chunk.SetBlockAtPositionInsideChunk(localX, localY, BlockChar);
 		}
 	}
@@ -200,7 +200,7 @@ bool Map::isChunkInCameraView(int chunkX, int chunkY, glm::vec3 cameraPos, glm::
 
 void Map::reloadAllMap()
 {
-	for (size_t	 x = 0; x < m_Chunks.size(); x++)
+	for (size_t x = 0; x < m_Chunks.size(); x++)
 	{
 		for (size_t y = 0; y < m_Chunks[x].size(); y++)
 		{
@@ -332,14 +332,14 @@ void Map::generationThreadLoop()
 				break;
 			}
 			{
-				chunkCoords = m_GenerationQueue.front(); 
+				chunkCoords = m_GenerationQueue.front();
 				m_GenerationQueue.pop();
 				m_PendingChunks.erase(chunkCoords);
 			}
 		}
 
 		int x = chunkCoords.first;
-		int y = m_NumOfChunksY - 1 - chunkCoords.second;
+		int y = chunkCoords.second;
 
 		if (!m_Chunks[x][y]->getIsChunkGenerated()) {
 			generateChunk(x, y);

@@ -13,7 +13,7 @@ Game::Game()
 
     m_TextureShader = std::make_shared<Shader>("assets/shaders/TextureShader.vert", "assets/shaders/TextureShader.frag");
 
-    m_player.SetPlayerPositionBasedOnBlocks(glm::vec3(1500,-500,0));
+    m_player.SetPlayerPositionBasedOnBlocks(glm::vec3(100,-100,0));
     //m_player.SetPlayerPositionBasedOnBlocks(glm::vec3(0, m_map.getHeightBasedOnX(0) + m_player.GetPlayerHeight(), 0));
 
     imguiAPI = new ImGuiAPI();
@@ -50,8 +50,10 @@ void Game::render()
     ImGui::Begin("Test Window");
     ImGui::Text("FPS: %.0f", 1.0f / DeltaTime::getDeltaTime());
     ImGui::Text("Player pos: (%.0f, %.0f, %.0f)", playerPos.x, playerPos.y, playerPos.z);
-    ImGui::Text("Cursor pos: (%.0f, %.0f)", CursorPos.x, CursorPos.y);
+    ImGui::Text("Cursor pos: (%.0f, %.0f)", CursorPos.x, -CursorPos.y);
     ImGui::Text("Current Block: %s", charToBlockName(currentBlock).c_str());
+    //char block = m_map.getBlockAtPosition(CursorPos.x, -CursorPos.y);
+    //ImGui::Text("Current Block AT cursor pos: %c", block);
     ImGui::End();
     imguiAPI->End();
     //

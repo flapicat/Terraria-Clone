@@ -1,18 +1,20 @@
 #include "trpch.h"
 #include "Chunk.h"
 
-inline std::unordered_map<char, std::vector<glm::vec2>> texCashe =
+
+void Chunk::initTexCache()
 {
-	{ 'A', Blocks[AIR].GetTexCoords()    },
-	{ 'G', Blocks[GRASS1].GetTexCoords() },
-	{ 'S', Blocks[STONE1].GetTexCoords() },
-	{ 'X', Blocks[DIRT1].GetTexCoords()  },
-	{ 'W', Blocks[SAND1].GetTexCoords()  },
-};
+	texCacheArray['A'] = Blocks[AIR].GetTexCoords();
+	texCacheArray['G'] = Blocks[GRASS1].GetTexCoords();
+	texCacheArray['S'] = Blocks[STONE1].GetTexCoords();
+	texCacheArray['X'] = Blocks[DIRT1].GetTexCoords();
+	texCacheArray['W'] = Blocks[SAND1].GetTexCoords();
+}
 
 Chunk::Chunk(glm::vec3 position)
 {
-	ChunkMatrix.resize(chunkHeight, std::string(chunkWidth, 'A'));
+	initTexCache();
+	m_ChunkMatrix.resize(m_chunkHeight, std::string(m_chunkWidth, 'A'));
 
 	m_position = position;
 	std::vector<float> vertices;
@@ -71,18 +73,19 @@ void Chunk::render(const std::shared_ptr<Shader>& shader)
 
 void Chunk::SetBlockAtPositionInsideChunk(int x, int y, char blockChar)
 {
-	if (x >= 0 && x < chunkWidth && y >= 0 && y < chunkHeight)
+	if (x >= 0 && x < m_chunkWidth && y >= 0 && y < m_chunkHeight)
 	{
-		ChunkMatrix[y][x] = blockChar;
+		m_ChunkMatrix[y][x] = blockChar;
 		ReloadAllChunk();
 	}
 }
 
 char Chunk::GetBlockAtPositionInsideChunk(int x, int y)
 {
-	if (x >= 0 && x < chunkWidth && y >= 0 && y < chunkHeight)
+	if (x >= 0 && x < m_chunkWidth 
+		&& y >= 0 && y < m_chunkHeight)
 	{
-		return ChunkMatrix[y][x];
+		return m_ChunkMatrix[y][x];
 	}
 	return 'e';
 }
@@ -102,13 +105,14 @@ void Chunk::ReloadAllChunk()
 	}
 }
 
+
 void Chunk::generate(std::vector<float>& vertices, std::vector<unsigned int>& indices)
 {
 	vertices.clear();
-	vertices.reserve(chunkWidth * chunkHeight * 20); // 20 floats per block
+	vertices.reserve(m_chunkWidth * m_chunkHeight * 20); // 20 floats per block
 
 	indices.clear();
-	indices.reserve(chunkWidth * chunkHeight * 6);   // 6 indices per block
+	indices.reserve(m_chunkWidth * m_chunkHeight * 6);   // 6 indices per block
 
 	unsigned int offset = 0;
 
@@ -119,16 +123,16 @@ void Chunk::generate(std::vector<float>& vertices, std::vector<unsigned int>& in
 	float z = 0.0f;
 
 
-	for (int y = 0; y < ChunkMatrix.size(); y++) {
-		for (int x = 0; x < ChunkMatrix[y].size(); x++) {
-			char tile = ChunkMatrix[y][x];
+	for (int y = 0; y < m_ChunkMatrix.size(); y++) {
+		for (int x = 0; x < m_ChunkMatrix[y].size(); x++) {
+			char tile = m_ChunkMatrix[y][x];
 			xpos = m_position.x + x * BlockSize;
 			ypos = m_position.y + y * -BlockSize;
 			z = 0.0f;
 
 			//if (tile == 'A') continue;
 
-			auto& tex = texCashe[tile];
+			auto& tex = texCacheArray[tile];
 
 			vertices.insert(vertices.end(), {
 				xpos              , ypos + BlockSize, z, tex[3].x, tex[3].y,
